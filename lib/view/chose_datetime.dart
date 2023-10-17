@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sms_inbox/flutter_sms_inbox.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -25,7 +24,7 @@ class _TextScreenState extends State<TextScreen> {
     ].request();
   }
   Future<void> startReadSms(DateTime after) async {
-    Read_SMS read_sms = Read_SMS();
+    ReadSMS readSMS = ReadSMS();
     DateTime now = DateTime.now();
     bool isPermissionGranted = await Permission.sms.isGranted;
     if (isPermissionGranted) {
@@ -33,7 +32,7 @@ class _TextScreenState extends State<TextScreen> {
       _messages = smsList.where((element) => element.sender =="VTMONEY"
           && element.body!.contains("TK ViettelPay 9704")).toList();
       _messages = _messages.where((data) => data.date!.isAfter(after) && data.date!.isBefore(now)).toList();
-      money = read_sms.ReadMonney(_messages, money);
+      money = readSMS.readMonney(_messages, money);
     } else {
       // Người dùng chưa cấp quyền, cần yêu cầu quyền truy cập.
       requestPermissions();
@@ -77,11 +76,8 @@ class _TextScreenState extends State<TextScreen> {
 
   Future _selectDateTime(BuildContext context) async {
     final date = await _selectDate(context);
-    if (date == null) return;
-
     final time = await _selectTime(context);
 
-    if (time == null) return;
     setState(() {
       dateTime = DateTime(
         date.year,
@@ -124,11 +120,11 @@ class _TextScreenState extends State<TextScreen> {
                 child: const Text('Select Date and Time Picker'),
               ),
             ),
-            SizedBox(height: 20,),
-            Container(
+            const SizedBox(height: 20,),
+            SizedBox(
               height: 400,
               child: _messages.isNotEmpty? MessagesListView(messages: _messages, money: money) :
-              Text("Nhap text"),
+              const Text("Nhap text"),
             )
           ],
         ),

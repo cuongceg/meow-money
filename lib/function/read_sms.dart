@@ -1,22 +1,20 @@
-import 'dart:async';
-
 import 'package:flutter_sms_inbox/flutter_sms_inbox.dart';
 
-class Read_SMS{
+class ReadSMS{
 
 
-  String FilterMoney(String mes){
+  String filterMoney(String mes){
 
     List<String> parts = mes.split(" ");
     return parts[4];
   }
 
-  List<String> ReadMonney(List<SmsMessage> sms, List<String> listmonney)  {
+  List<String> readMonney(List<SmsMessage> sms, List<String> listmonney)  {
 
-    sms.forEach((element) {
+    for (var element in sms) {
       String messBody = element.body!;
-      listmonney.add(FilterMoney(messBody));
-    });
+      listmonney.add(filterMoney(messBody));
+    }
     return listmonney;
 }
 

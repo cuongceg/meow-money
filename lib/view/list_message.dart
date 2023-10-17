@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sms_inbox/flutter_sms_inbox.dart';
 
@@ -21,7 +20,7 @@ class MessagesListView extends StatelessWidget {
 
         return ListTile(
           title: Text('${message.date}'),
-          subtitle: Text('${money[i]!}'),
+          subtitle: Text(money[i]),
         );
       },
     );
