@@ -1,12 +1,11 @@
-import 'package:monney_management/view/chose_datetime.dart';
-import 'package:monney_management/widgets/wrapper.dart';
+//import 'package:monney_management/pages/wrapper.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:size_config/size_config.dart';
-import 'package:wave/wave.dart';
-import 'package:wave/config.dart';
+import 'package:slider_button/slider_button.dart';
 import 'package:monney_management/const_value.dart';
+import 'package:monney_management/pages/login.dart';
 
 class Myscreen extends StatefulWidget {
   const Myscreen({super.key});
@@ -33,69 +32,35 @@ class _MyscreenState extends State<Myscreen> {
                   width: widthR,
                   height:heightR,
                   child: Stack(children:[
-                    FadeInUp(
-                      delay: const Duration(milliseconds: 500),
-                      duration: const Duration(milliseconds: 1000),
-                      child: WaveWidget(
-                        config: CustomConfig(
-                            gradients: [
-                              [Colors.white,Colors.purple],
-                              [Colors.white,Colors.purple],
-                              [Colors.white,Colors.white],
-                            ],
-                            durations: [3500,10000,6000],
-                            heightPercentages:[0.35,0.45,0.75]
-                        ),
-                        size: Size(widthR,heightR),
-                      ),
-                    ),
                     Positioned(
                       top:100,
-                      left: widthR/3.15,
-                      child: FadeInUpBig(
-                        delay: const Duration(milliseconds: 1300),
+                      left: widthR/5,
+                      child: FadeInDownBig(
+                        delay: const Duration(milliseconds: 200),
                         duration: const Duration(milliseconds: 1500),
                         child: SizedBox(
-                          width: widthR/3,
-                          height: heightR/3,
+                          width: widthR/2,
+                          height: heightR/4,
                           child: Center(
                               child:Transform.rotate(
-                                angle: 35 * 3.1415927 / 180,
-                                child: Image.asset('assets/images/wallet.png'),
+                                angle: 345 * 3.1415927 / 180,
+                                child: Image.asset('assets/images/wallet.png',width:widthR/2,height: heightR/3,),
                               )),
                         ),
                       ),
                     ),
                     Positioned(
-                      bottom: 30,
-                      left: 0,
-                      child: FadeInLeftBig(
-                        delay: const Duration(milliseconds: 700),
-                        duration: const Duration(milliseconds:1000),
-                        child: SizedBox(
-                          width: widthR/2.5,
-                          height: heightR /7,
-                          child: Center(
-                            child: Text(
-                                "Socium",
-                                style:Font().title
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Positioned(
-                      bottom: 90,
-                      left:0,
+                      top:heightR/2.5,
+                      left:10,
                       child: FadeInLeft(
                         delay: const Duration(milliseconds: 800),
                         duration: const Duration(milliseconds: 1000),
                         child: SizedBox(
-                          width: widthR/1.2,
+                          width: widthR/1.5,
                           height: heightR /5,
                           child: Center(
                             child: Text(
-                                "We provide the\nbest partners\nfor you",
+                                "Easy money,\neasy life",
                                 style:Font().title1
                             ),
                           ),
@@ -103,30 +68,43 @@ class _MyscreenState extends State<Myscreen> {
                       ),
                     ),
                     Positioned(
-                        bottom: 50,
-                        left: 30,
+                      top:heightR/1.8,
+                      left:15,
+                      child: FadeInLeft(
+                        delay: const Duration(milliseconds: 1000),
+                        duration: const Duration(milliseconds: 1000),
+                        child: SizedBox(
+                          width: widthR,
+                          height: heightR /5,
+                          child: Center(
+                            child: Text(
+                                "Make safe payment and keep your money wise with our help",
+                                style:Font().bodyBlack
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                        bottom:heightR/8,
+                        left: widthR/12,
                         child: FadeInLeft(
-                          delay: const Duration(milliseconds: 3000),
+                          delay: const Duration(milliseconds: 2000),
                           duration: const Duration(milliseconds: 1000),
                           child: Center(
-                            child: Container(
+                            child:SliderButton(
+                              action: (){Navigator.push(context, MaterialPageRoute(builder: (context)=>Login()));},
+                              label:Text("Slide to start",style: Font().bodyWhite,),
+                              icon: Image.asset("assets/images/coins.png",fit: BoxFit.fill,),
                               width: widthR/1.2,
                               height: heightR/15,
-                              decoration: const BoxDecoration(
-                                  color: Colors.deepPurple,
-                                  borderRadius: BorderRadius.all(Radius.circular(40))
-                              ),
-                              child: TextButton(
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text('Start now',style:Font().bodyWhite,),
-                                    const Icon(Icons.arrow_forward,color: Colors.white,size: 25,)
-                                  ],
-                                ),
-                                onPressed:(){Navigator.of(context).push(_createRoute());},
-                              ),
-                            ),
+                              buttonSize: 50,
+                              alignLabel: Alignment.center,
+                              buttonColor:Colors.deepPurpleAccent,
+                              highlightedColor: Colors.purple.shade600,
+                              baseColor: Colors.white,
+                              backgroundColor: Colors.deepPurple,
+                              )
                           ),
                         )),
                   ],)
@@ -137,21 +115,4 @@ class _MyscreenState extends State<Myscreen> {
       ),
     );
   }
-}
-Route _createRoute() {
-  return PageRouteBuilder(
-    pageBuilder: (context, animation, secondaryAnimation) => const TextScreen(),
-    transitionsBuilder: (context, animation, secondaryAnimation, child) {
-      const begin = Offset(0.0, 1.0);
-      const end = Offset.zero;
-      const curve = Curves.ease;
-
-      var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-
-      return SlideTransition(
-        position: animation.drive(tween),
-        child: child,
-      );
-    },
-  );
 }

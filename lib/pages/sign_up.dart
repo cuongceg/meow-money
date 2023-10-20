@@ -1,10 +1,11 @@
 import 'package:get/get.dart';
 import 'package:monney_management/const_value.dart';
 import 'package:monney_management/services/auth_service.dart';
-import 'package:flutter/services.dart';
 import 'package:monney_management/services/database.dart';
 import 'package:monney_management/models/user.dart';
+import 'package:monney_management/pages/login.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class SignUp extends StatefulWidget{
   const SignUp({super.key});
@@ -17,9 +18,9 @@ class SignUp extends StatefulWidget{
 class MySignupState extends State<SignUp>{
   final AuthService auth=AuthService();
   final _formKey =GlobalKey<FormState>();
-  String? firstName,userName,confirmpassword;
+  String? fullName,userName,confirmpassword;
   String _email='',password='';
-  final firstnameEditingController=TextEditingController();
+  final fullnameEditingController=TextEditingController();
   final usernameEditingController=TextEditingController();
   final emailEditingController=TextEditingController();
   final passwordEditingController=TextEditingController();
@@ -74,10 +75,7 @@ class MySignupState extends State<SignUp>{
                       child: Container(
                         height: 50,
                         width:widthR,
-                        decoration: BoxDecoration(
-                            color: Colors.purple[800],
-                            borderRadius: const BorderRadius.all(Radius.circular(40))
-                        ),
+                        decoration:ConstWigdet().boxDecoration(),
                         child: TextButton(
                           onPressed:()async{
                             if(_formKey.currentState!.validate()){
@@ -92,7 +90,7 @@ class MySignupState extends State<SignUp>{
                               }
                               else{
                                 // create a profile base on unique uid
-                                await DatabaseService(uid:result.uid).updateProfile(firstName, userName,'18','Ha Noi','Male','10.0','FPT',result.uid,null);
+                                await Database(uid:result.uid).updateData(userName,fullName,'Male');
                                 showModalBottomSheet<void>(
                                   context: context,
                                   builder: (BuildContext context) {
@@ -115,7 +113,7 @@ class MySignupState extends State<SignUp>{
                                                 ),
                                                 child: TextButton(
                                                   child:Text('Sign in',style:Font().bodyWhite,),
-                                                  onPressed: () => Get.to(()=>const LoginWithUsername()),
+                                                  onPressed: () => Get.to(()=>const Login()),
                                                 ),
                                               ),
                                             ),
@@ -154,10 +152,10 @@ class MySignupState extends State<SignUp>{
             else
             {return null;}
           },
-          controller: firstnameEditingController,
+          controller: fullnameEditingController,
           onChanged: (text){
             setState(() {
-              firstName=text;
+              fullName=text;
             });
           },
           decoration:ConstWigdet().inputDecoration('Your name')
