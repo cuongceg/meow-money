@@ -2,10 +2,10 @@
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:animate_do/animate_do.dart';
-import 'package:monney_management/pages/wrapper.dart';
 import 'package:size_config/size_config.dart';
 import 'package:slider_button/slider_button.dart';
 import 'package:monney_management/const_value.dart';
+import 'package:monney_management/pages/login/login.dart';
 
 class Myscreen extends StatefulWidget {
   const Myscreen({super.key});
@@ -93,7 +93,7 @@ class _MyscreenState extends State<Myscreen> {
                           duration: const Duration(milliseconds: 1000),
                           child: Center(
                             child:SliderButton(
-                              action: (){Navigator.push(context, MaterialPageRoute(builder: (context)=>const Wrapper()));},
+                              action: (){Navigator.push(context, MaterialPageRoute(builder: (context)=>Login()));},
                               label:Text("Slide to start",style: Font().bodyWhite,),
                               icon: Image.asset("assets/images/coins.png",fit: BoxFit.fill,),
                               width: widthR/1.2,
