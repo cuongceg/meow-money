@@ -1,11 +1,11 @@
+import 'package:monney_management/pages/home/home_page.dart';
 import 'package:wave/config.dart';
 import 'package:wave/wave.dart';
 import 'package:monney_management/services/auth_service.dart';
-import 'package:monney_management/pages/sign_up.dart';
+import 'package:monney_management/pages/login/sign_up.dart';
 import 'package:monney_management/const_value.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:monney_management/view/chose_datetime.dart';
 
 class Login extends StatefulWidget{
   const Login({Key? key}) : super(key: key);
@@ -15,9 +15,10 @@ class Login extends StatefulWidget{
 
 
 class _LoginState extends State<Login>{
+  final AuthService authService=AuthService();
   final _formKey=GlobalKey<FormState>();
   final AuthService auth= AuthService();
-  String? email,password;
+  String email='',password='';
   final emailController=TextEditingController();
   final passwordController=TextEditingController();
   @override
@@ -37,6 +38,7 @@ class _LoginState extends State<Login>{
               child: ListView(
                 children:<Widget>[
                   Stack(
+                    clipBehavior: Clip.none,
                     children: [
                       Positioned(
                           child:Container(
@@ -52,26 +54,26 @@ class _LoginState extends State<Login>{
                               [Colors.white,Colors.purple.shade200],
                             ],
                             durations: [5000,10000,6000],
-                            heightPercentages:[0,0.4,0.8]
+                            heightPercentages:[0,0.35,0.7]
                         ),
                         size: Size(widthR,heightR/5),
                       ),
                       Positioned(child: Text("Welcome back",style: Font().welcomeWhite,),),
+                      Positioned(
+                          top: heightR/10,
+                          left:widthR/3.1,
+                          child:const CircleAvatar(
+                            backgroundImage: AssetImage('assets/images/logo_signin.png'),
+                            radius: 60,
+                          ))
                     ],
                   ),
                   Padding(
-                      padding:const EdgeInsets.symmetric(vertical: 10),
-                      child: SizedBox(
-                        width: widthR/5,
-                        height: heightR/6,
-                        child: const Center(child:CircleAvatar(
-                          backgroundImage: AssetImage('assets/images/logo_signin.png'),
-                          radius: 60,
-                        )),
-                      ),
+                      padding: const EdgeInsets.only(top:30,left:135),
+                      child: Text('Log in',style: Font().welcomePurple,),
                   ),
                   Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 10,horizontal: 20),
+                    padding: const EdgeInsets.only(top:30,left: 20,right: 20),
                     child:TextFormField(
                       validator:(val){
                         if(val==null||val.isEmpty){
@@ -111,8 +113,18 @@ class _LoginState extends State<Login>{
                       decoration: ConstWigdet().boxDecoration(),
                       child: TextButton(
                         child:Text("Log in",style:Font().headingWhite,),
-                        onPressed:(){
-                          Navigator.push(context,MaterialPageRoute(builder:(context)=>const TextScreen()));
+                        onPressed:()async{
+                          dynamic result =authService.signInemailandpassword(email, password);
+                          if(result == null){
+                            final snackBar = SnackBar(
+                              backgroundColor:Colors.purple[100],
+                              content: Text('Invalid email or wrong password!',style: Font().bodyWhite,),
+                            );
+                            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                          }
+                          else{
+                            Navigator.push(context,MaterialPageRoute(builder:(context)=>const HomePage()));
+                          }
                         },
                       ),
                     ),
