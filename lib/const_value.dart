@@ -1,10 +1,11 @@
 import 'package:google_fonts/google_fonts.dart';
 import 'package:get/get.dart';
-import 'package:monney_management/pages/login.dart';
+import 'package:monney_management/pages/login/login.dart';
 import 'package:flutter/material.dart';
-
 class Font{
   final welcomeWhite=GoogleFonts.pacifico(fontSize:40,color: Colors.white);
+  final welcomePurple=GoogleFonts.pacifico(fontSize:40,color: Colors.purple);
+  final pacificoWhite=GoogleFonts.pacifico(fontSize: 25,color: Colors.white);
   final bodyWhite=GoogleFonts.roboto(fontSize:19,color:Colors.white);
   final bodyBlack=GoogleFonts.roboto(fontSize: 19,color: Colors.black);
   final bodyError=GoogleFonts.roboto(fontSize:19,color: Colors.red);
@@ -13,7 +14,7 @@ class Font{
   final headingWhite=GoogleFonts.roboto(fontSize: 25,color: Colors.white,fontWeight: FontWeight.bold);
   final headingPurple=GoogleFonts.roboto(fontSize: 25,color: Colors.purple[200],fontWeight: FontWeight.bold);
   final title=GoogleFonts.roboto(color: Colors.deepPurple,fontSize:40,fontWeight: FontWeight.bold);
-  final title1=GoogleFonts.lato(color: Colors.black,fontSize: 45,fontWeight: FontWeight.bold);
+  final title1=GoogleFonts.roboto(color: Colors.black,fontSize: 45,fontWeight: FontWeight.bold);
 }
 
 class ConstValue{
