@@ -5,7 +5,7 @@ import 'package:animate_do/animate_do.dart';
 import 'package:size_config/size_config.dart';
 import 'package:slider_button/slider_button.dart';
 import 'package:monney_management/const_value.dart';
-import 'package:monney_management/pages/login.dart';
+import 'package:monney_management/pages/login/login.dart';
 
 class Myscreen extends StatefulWidget {
   const Myscreen({super.key});
