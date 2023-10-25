@@ -1,4 +1,5 @@
-import 'package:monney_management/pages/home/home_page.dart';
+import 'package:monney_management/models/user.dart';
+import 'package:monney_management/pages/wrapper.dart';
 import 'package:wave/config.dart';
 import 'package:wave/wave.dart';
 import 'package:monney_management/services/auth_service.dart';
@@ -114,16 +115,26 @@ class _LoginState extends State<Login>{
                       child: TextButton(
                         child:Text("Log in",style:Font().headingWhite,),
                         onPressed:()async{
-                          dynamic result =authService.signInemailandpassword(email, password);
-                          if(result == null){
+                          if(_formKey.currentState!.validate()){
+                            MyUser? result =await authService.signInemailandpassword(email, password);
+                            print(result);
+                            if(result == null){
+                              final snackBar = SnackBar(
+                                backgroundColor:Colors.purple[100],
+                                content: Text('Invalid email or wrong password!',style: Font().bodyWhite,),
+                              );
+                              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                            }
+                            else{
+                              Navigator.push(context,MaterialPageRoute(builder:(context)=>const Wrapper()));
+                            }
+                          }
+                          else{
                             final snackBar = SnackBar(
                               backgroundColor:Colors.purple[100],
                               content: Text('Invalid email or wrong password!',style: Font().bodyWhite,),
                             );
                             ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                          }
-                          else{
-                            Navigator.push(context,MaterialPageRoute(builder:(context)=>const HomePage()));
                           }
                         },
                       ),
