@@ -3,7 +3,7 @@ import 'package:monney_management/const_value.dart';
 import 'package:monney_management/services/auth_service.dart';
 import 'package:monney_management/services/database.dart';
 import 'package:monney_management/models/user.dart';
-import 'package:monney_management/pages/login.dart';
+import 'package:monney_management/pages/login/login.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -79,7 +79,7 @@ class MySignupState extends State<SignUp>{
                         child: TextButton(
                           onPressed:()async{
                             if(_formKey.currentState!.validate()){
-                              MyUser? result=await auth.signUpEmail(_email, password);
+                               dynamic result=await auth.signUpEmail(_email, password);
                               if(result == null){
                                 //check sign up successfully or not
                                 final snackBar = SnackBar(
