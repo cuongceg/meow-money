@@ -15,3 +15,7 @@ x86/
 *.[Cc]ache
 # but keep track of directories ending in .cache
 !*.[Cc]ache/
+
+#Genarated file
+**/generated_plugin_registrant.cc
+**/generated_plugins.cmake
