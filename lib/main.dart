@@ -4,10 +4,12 @@ import 'package:get/get.dart';
 import 'package:monney_management/models/user.dart';
 import 'package:monney_management/services/auth_service.dart';
 import 'package:monney_management/pages/splash_page.dart';
+import 'package:monney_management/services/database.dart';
 import 'package:provider/provider.dart';
 import 'firebase_options.dart';
 import 'package:flutter/services.dart';
-import 'package:monney_management/view/chose_datetime.dart';
+
+
 
 void main() async{
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
@@ -25,9 +27,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return StreamProvider<MyUser?>.value(
-      initialData: null,
-      value: AuthService().user,
+    return MultiProvider(
+      providers: [
+        StreamProvider<MyUser?>.value(value: AuthService().user, initialData:null),
+        StreamProvider<List<UserInfo>?>.value(value:Database().authData, initialData: null)
+      ],
       child:const GetMaterialApp(
           debugShowCheckedModeBanner: false,
           title: 'Finance Management',
