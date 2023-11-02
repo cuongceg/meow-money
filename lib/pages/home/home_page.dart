@@ -1,67 +1,170 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:monney_management/pages/login/login.dart';
-import 'package:monney_management/services/auth_service.dart';
+import 'package:flutter_floating_bottom_bar/flutter_floating_bottom_bar.dart';
+import 'package:monney_management/pages/home/main_screen/record.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
-
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({Key? key}) : super(key: key);
   @override
-  State<HomePage> createState() => _HomePageState();
+  _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
-  int selectedIndex=0;
-  List<Widget> widgetOptions=[
-    const Text('Trang 1'),
-    const Text("Trang 2"),
-    const Text("Trang 3")
+class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateMixin {
+  late int currentPage;
+  late TabController tabController;
+  final List<Color> colors = [
+    Colors.yellow,
+    Colors.red,
+    Colors.green,
+    Colors.blue,
+    Colors.pink,
   ];
-  void onItemTapped(int index){
+
+  @override
+  void initState() {
+    currentPage = 0;
+    tabController = TabController(length: 5, vsync: this);
+    tabController.animation?.addListener(
+          () {
+        final value = tabController.animation!.value.round();
+        if (value != currentPage && mounted) {
+          changePage(value);
+        }
+      },
+    );
+    super.initState();
+  }
+
+  void changePage(int newPage) {
     setState(() {
-      selectedIndex=index;
+      currentPage = newPage;
     });
   }
 
   @override
+  void dispose() {
+    tabController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(
-        const SystemUiOverlayStyle(
-            statusBarColor: Colors.white
-        )
-    );
-    return Scaffold(
-      appBar:AppBar(
-        leading:IconButton(
-          icon: const Icon(Icons.logout),
-          onPressed:(){
-            AuthService().signOut();
-            Navigator.push(context,MaterialPageRoute(builder: (context)=>const Login()));
-          },
+    final Color unselectedColor = colors[currentPage].computeLuminance() < 0.5 ? Colors.black : Colors.white;
+    final Color unselectedColorReverse = colors[currentPage].computeLuminance() < 0.5 ? Colors.white : Colors.black;
+
+    return SafeArea(
+      child: Scaffold(
+        body: BottomBar(
+          clip: Clip.none,
+          fit: StackFit.expand,
+          borderRadius: BorderRadius.circular(500),
+          duration: const Duration(milliseconds: 500),
+          curve: Curves.decelerate,
+          showIcon: true,
+          width: MediaQuery.of(context).size.width * 0.8,
+          barColor: colors[currentPage].computeLuminance() > 0.5 ? Colors.black : Colors.white,
+          start: 2,
+          end: 0,
+          offset: 10,
+          barAlignment: const Alignment(0.1,0.9),
+          iconHeight: 30,
+          iconWidth: 30,
+          reverse: false,
+          hideOnScroll: true,
+          scrollOpposite: false,
+          onBottomBarHidden: () {},
+          onBottomBarShown: () {},
+          body: (context, controller) => TabBarView(
+            controller: tabController,
+            dragStartBehavior: DragStartBehavior.down,
+            physics: const BouncingScrollPhysics(),
+            children:const <Widget>[
+              Record(),
+              Text('Trang 1'),
+              Text('Trang 1'),
+              Text('Trang 1'),
+              Text('Trang 1'),
+            ]
+          ),
+          child: Stack(
+            alignment: Alignment.center,
+            clipBehavior: Clip.none,
+            children: [
+              TabBar(
+                indicatorPadding: const EdgeInsets.fromLTRB(6, 0, 6, 0),
+                controller: tabController,
+                indicator: UnderlineTabIndicator(
+                    borderSide: BorderSide(
+                      color: currentPage <= 4 ? colors[currentPage] : unselectedColor,
+                      width: 4,
+                    ),
+                    insets: const EdgeInsets.fromLTRB(16, 0, 16, 8)),
+                tabs: [
+                  SizedBox(
+                    height: 55,
+                    width: 40,
+                    child: Center(
+                        child: Icon(
+                          Icons.home,
+                          color: currentPage == 0 ? colors[0] : unselectedColor,
+                        )),
+                  ),
+                  SizedBox(
+                    height: 55,
+                    width: 40,
+                    child: Center(
+                      child: Icon(
+                        Icons.search,
+                        color: currentPage == 1 ? colors[1] : unselectedColor,
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 55,
+                    width: 40,
+                    child: Center(
+                      child: Icon(
+                        Icons.add,
+                        color: currentPage == 2 ? colors[2] : unselectedColorReverse,
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 55,
+                    width: 40,
+                    child: Center(
+                      child: Icon(
+                        Icons.favorite,
+                        color: currentPage == 3 ? colors[3] : unselectedColor,
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 55,
+                    width: 40,
+                    child: Center(
+                      child: Icon(
+                        Icons.settings,
+                        color: currentPage == 4 ? colors[4] : unselectedColor,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              Positioned(
+                top: -60,
+                child:IconButton(
+                  icon: const CircleAvatar(
+                    backgroundImage:AssetImage("assets/images/paw-print.png"),
+                    backgroundColor: Colors.white,
+                  ),
+                  iconSize:120,
+                  onPressed:(){},
+                )
+              )
+            ],
+          ),
         ),
-      ),
-      backgroundColor: Colors.white,
-      body: Center(
-        child: widgetOptions.elementAt(selectedIndex),
-      ),
-      bottomNavigationBar:BottomNavigationBar(
-        items:const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-              icon:Icon(Icons.home_outlined),
-              label:"Home"
-          ),
-          BottomNavigationBarItem(
-              icon:Icon(Icons.qr_code_2),
-              label:"QR"
-          ),
-          BottomNavigationBarItem(
-              icon:Icon(Icons.person),
-              label:"Profile"
-          )
-        ],
-        currentIndex: selectedIndex,
-        selectedItemColor: Colors.purple[100],
-        onTap: onItemTapped,
       ),
     );
   }
