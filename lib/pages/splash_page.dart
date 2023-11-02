@@ -14,7 +14,7 @@ class Myscreen extends StatefulWidget {
   State<Myscreen> createState() => _MyscreenState();
 }
 
-class _MyscreenState extends State<Myscreen> {
+class _MyscreenState extends State<Myscreen>with TickerProviderStateMixin{
   @override
   Widget build(BuildContext context) {
     double heightR=MediaQuery.of(context).size.height;
@@ -92,21 +92,26 @@ class _MyscreenState extends State<Myscreen> {
                           delay: const Duration(milliseconds: 2000),
                           duration: const Duration(milliseconds: 1000),
                           child: Center(
-                            child:SliderButton(
-                              action: (){Navigator.push(context, MaterialPageRoute(builder: (context)=>const Wrapper()));},
-                              label:Text("Slide to start",style: Font().bodyWhite,),
-                              icon: Image.asset("assets/images/coins.png",fit: BoxFit.fill,),
-                              width: widthR/1.2,
-                              height: heightR/15,
-                              buttonSize: 50,
-                              alignLabel: Alignment.center,
-                              buttonColor:Colors.deepPurpleAccent,
-                              highlightedColor: Colors.purple.shade600,
-                              baseColor: Colors.white,
-                              backgroundColor: Colors.deepPurple,
+                              child:SliderButton(
+                                action: (){Navigator.push(context, MaterialPageRoute(builder: (context)=>const Wrapper()));},
+                                label:Text("Slide to start",style: Font().bodyWhite,),
+                                icon: Image.asset("assets/images/coins.png",fit: BoxFit.fill,),
+                                width: widthR/1.2,
+                                height: heightR/15,
+                                buttonSize: 50,
+                                alignLabel: Alignment.center,
+                                buttonColor:Colors.deepPurpleAccent,
+                                highlightedColor: Colors.purple.shade600,
+                                baseColor: Colors.white,
+                                backgroundColor: Colors.deepPurple,
+                                shimmer: true,
+                                boxShadow:const BoxShadow(
+                                  color: Colors.white,
+                                  blurRadius: 0.9,
+                                  spreadRadius: 0.5,
+                                ),
                               )
-                          ),
-                        )),
+                          )),)
                   ],)
               ),
             )
