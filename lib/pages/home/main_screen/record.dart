@@ -81,13 +81,14 @@ class _RecordState extends State<Record> {
                             padding: const EdgeInsets.only(left:10,right:15,top:15,bottom:20),
                             child: Text("+690.000",style: Font().bodyBlack,),
                           ),
+                          Expanded(child: Image.asset("assets/images/kitty.png"),)
                         ],
                       ),
                     ],
                   ),
                 ),
                 // Make the initial height of the SliverAppBar larger than normal.
-                expandedHeight:heightR/5,
+                expandedHeight:heightR/4.6,
               ),
             ];
           },
