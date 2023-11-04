@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_floating_bottom_bar/flutter_floating_bottom_bar.dart';
+import 'package:monney_management/pages/home/bill_history_screen/bill_history.dart';
 import 'package:monney_management/pages/home/main_screen/record.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -17,13 +18,12 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
     Colors.red,
     Colors.green,
     Colors.blue,
-    Colors.pink,
   ];
 
   @override
   void initState() {
     currentPage = 0;
-    tabController = TabController(length: 5, vsync: this);
+    tabController = TabController(length: 4, vsync: this);
     tabController.animation?.addListener(
           () {
         final value = tabController.animation!.value.round();
@@ -80,92 +80,38 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
             physics: const BouncingScrollPhysics(),
             children:const <Widget>[
               Record(),
-              Text('Trang 1'),
-              Text('Trang 1'),
+              BillHistory(),
               Text('Trang 1'),
               Text('Trang 1'),
             ]
           ),
-          child: Stack(
-            alignment: Alignment.center,
-            clipBehavior: Clip.none,
-            children: [
-              TabBar(
-                indicatorPadding: const EdgeInsets.fromLTRB(6, 0, 6, 0),
-                controller: tabController,
-                indicator: UnderlineTabIndicator(
-                    borderSide: BorderSide(
-                      color: currentPage <= 4 ? colors[currentPage] : unselectedColor,
-                      width: 4,
-                    ),
-                    insets: const EdgeInsets.fromLTRB(16, 0, 16, 8)),
-                tabs: [
-                  SizedBox(
-                    height: 55,
-                    width: 40,
-                    child: Center(
-                        child: Icon(
-                          Icons.home,
-                          color: currentPage == 0 ? colors[0] : unselectedColor,
-                        )),
-                  ),
-                  SizedBox(
-                    height: 55,
-                    width: 40,
-                    child: Center(
-                      child: Icon(
-                        Icons.search,
-                        color: currentPage == 1 ? colors[1] : unselectedColor,
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 55,
-                    width: 40,
-                    child: Center(
-                      child: Icon(
-                        Icons.add,
-                        color: currentPage == 2 ? colors[2] : unselectedColorReverse,
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 55,
-                    width: 40,
-                    child: Center(
-                      child: Icon(
-                        Icons.favorite,
-                        color: currentPage == 3 ? colors[3] : unselectedColor,
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 55,
-                    width: 40,
-                    child: Center(
-                      child: Icon(
-                        Icons.settings,
-                        color: currentPage == 4 ? colors[4] : unselectedColor,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Positioned(
-                top: -60,
-                child:IconButton(
-                  icon: const CircleAvatar(
-                    backgroundImage:AssetImage("assets/images/paw-print.png"),
-                    backgroundColor: Colors.white,
-                  ),
-                  iconSize:120,
-                  onPressed:(){},
-                )
-              )
+          child:TabBar(
+            indicatorPadding: const EdgeInsets.fromLTRB(6, 0, 6, 0),
+            controller: tabController,
+            indicator: UnderlineTabIndicator(
+                borderSide: BorderSide(
+                  color: currentPage <= 3 ? colors[currentPage] : unselectedColor,
+                  width: 4,
+                ),
+                insets: const EdgeInsets.fromLTRB(16, 0, 16, 8)),
+            tabs: [
+              iconNavBar("assets/images/invoice.png"),
+              iconNavBar("assets/images/mobile-transfer.png"),
+              iconNavBar("assets/images/paw-print.png"),
+              iconNavBar("assets/images/gear.png")
             ],
           ),
         ),
       ),
     );
   }
+}
+Widget iconNavBar(String asset){
+  return SizedBox(
+    height: 55,
+    width: 40,
+    child: Center(
+      child:Image.asset(asset,width:25,height:25,)
+    ),
+  );
 }
