@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:monney_management/const_value.dart';
+import 'package:monney_management/pages/home/bill_history_screen/bill_charts.dart';
 import 'package:quickalert/quickalert.dart';
 
 
@@ -12,7 +13,6 @@ class BillHistory extends StatefulWidget {
 }
 
 class _BillHistoryState extends State<BillHistory> {
-  int indexTouched=-1;
   bool innerBoxIsScroll=true;
   @override
   Widget build(BuildContext context) {
@@ -102,18 +102,7 @@ class _BillHistoryState extends State<BillHistory> {
                     topRight:Radius.circular(40)
                 )
             ),
-            child:Column(
-              children: [
-                Center(
-                  child: Container(
-                    height:5,
-                    width: widthR/4,
-                    color:Colors.grey.shade400,
-                  ),
-                ),
-                Expanded(child: child)
-              ],
-            ),
+            child:const BillChart(),
           ),
         ),
       ),
