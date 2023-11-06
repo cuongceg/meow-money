@@ -1,4 +1,4 @@
-# monney_management
+# meow-money
 
 A finance app by AiThings Lab.
 
