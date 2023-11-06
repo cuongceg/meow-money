@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:fl_chart/fl_chart.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'charts.dart';
+import 'package:monney_management/const_value.dart';
+import 'package:quickalert/quickalert.dart';
 
 class BillChart extends StatefulWidget {
   const BillChart({super.key});
@@ -10,66 +11,10 @@ class BillChart extends StatefulWidget {
 }
 
 class _BillChartState extends State<BillChart> {
-  int touchedIndex=-1;
-  TextStyle chartFont(double fontSize,List<Shadow>shadows){
-    return GoogleFonts.roboto(
-      fontSize:fontSize,
-      fontWeight:FontWeight.bold,
-      color: Colors.white,
-      shadows:shadows
-    );
-  }
-  List<PieChartSectionData>showingSections(){
-    return List.generate(4, (i) {
-      final isTouched = i == touchedIndex;
-      final fontSize = isTouched ? 25.0 : 16.0;
-      final radius = isTouched ? 60.0 : 50.0;
-      const shadows = [Shadow(color: Colors.black, blurRadius: 2)];
-      switch (i) {
-        case 0:
-          return PieChartSectionData(
-            color: Colors.blue,
-            value: 40,
-            title: '40%',
-            radius: radius,
-            titleStyle:chartFont(fontSize, shadows)
-          );
-        case 1:
-          return PieChartSectionData(
-            color: Colors.yellow,
-            value: 30,
-            title: '30%',
-            radius: radius,
-            titleStyle:chartFont(fontSize, shadows)
-          );
-        case 2:
-          return PieChartSectionData(
-            color: Colors.purple,
-            value: 15,
-            title: '15%',
-            radius: radius,
-            titleStyle:chartFont(fontSize, shadows)
-          );
-        case 3:
-          return PieChartSectionData(
-            color: Colors.green,
-            value: 15,
-            title: '15%',
-            radius: radius,
-            titleStyle:chartFont(fontSize, shadows)
-          );
-        default:
-          throw Error();
-      }
-    });
-  }
   @override
   Widget build(BuildContext context) {
     double widthR=MediaQuery.of(context).size.width;
-    double heightR=MediaQuery.of(context).size.height;
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment:CrossAxisAlignment.start,
+    return ListView(
       children: [
         Center(
           child: Container(
@@ -78,57 +23,95 @@ class _BillChartState extends State<BillChart> {
             color:Colors.grey.shade400,
           ),
         ),
-        Row(
-          children: [
-            Expanded(
-                child:AspectRatio(
-                  aspectRatio:1,
-                  child:PieChart(
-                    PieChartData(
-                      pieTouchData:PieTouchData(
-                        touchCallback:(FlTouchEvent event, pieTouchResponse){
-                          setState(() {
-                            if(!event.isInterestedForInteractions||pieTouchResponse==null||pieTouchResponse.touchedSection==null){
-                              touchedIndex=-1;
-                              return;
-                            }
-                            touchedIndex=pieTouchResponse.touchedSection!.touchedSectionIndex;
-                          });
-                        }
-                      ),
-                      borderData:FlBorderData(show: false),
-                      sectionsSpace:0,
-                      centerSpaceRadius:60,
-                      sections:showingSections(),
-                    )
-                  ),
-                )),
-          ],
+        Padding(
+          padding: const EdgeInsets.only(top:20),
+          child: Text("Expenses:",style:Font().headingBlack,),
         ),
-        Expanded(
-            child:AspectRatio(
-              aspectRatio:1,
-              child:PieChart(
-                  PieChartData(
-                    pieTouchData:PieTouchData(
-                        touchCallback:(FlTouchEvent event, pieTouchResponse){
-                          setState(() {
-                            if(!event.isInterestedForInteractions||pieTouchResponse==null||pieTouchResponse.touchedSection==null){
-                              touchedIndex=-1;
-                              return;
-                            }
-                            touchedIndex=pieTouchResponse.touchedSection!.touchedSectionIndex;
-                          });
-                        }
-                    ),
-                    borderData:FlBorderData(show: false),
-                    sectionsSpace:0,
-                    centerSpaceRadius:60,
-                    sections:showingSections(),
-                  )
-              ),
-            ))
+        const Charts(),
+        const Expenses(text:"Tuition fee"),
+        const Expenses(text:"Clothes"),
+        const Expenses(text:"Food"),
+        ConstWigdet().thinDivider(),
+        Padding(
+          padding: const EdgeInsets.only(right:0,top:20),
+          child: Text("Incomes:",style:Font().headingBlack,),
+        ),
+        const Charts(),
+        const Expenses(text:"Tuition fee"),
+        const Expenses(text:"Clothes"),
+        const Expenses(text:"Food"),
       ],
+    );
+  }
+}
+
+class Expenses extends StatelessWidget{
+  const Expenses({super.key,required this.text});
+  final String text;
+  @override
+  Widget build(BuildContext context){
+    return ListTile(
+      leading:const Icon(Icons.wallet,size:30,),
+      title:Text(text, style:Font().bodyBlack,),
+      onTap:(){
+        QuickAlert.show(
+          context: context,
+          type: QuickAlertType.custom,
+          title:"Tuition fee",
+          text: 'Details',
+          customAsset:"assets/images/cat_money.gif",
+          widget:Padding(
+            padding: const EdgeInsets.only(top:8.0),
+            child: Column(
+              mainAxisAlignment:MainAxisAlignment.center,
+              children: <Widget>[
+                ConstWigdet().thinDivider(),
+                Row(
+                  mainAxisAlignment:MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text("Amount:",style:Font().bodyBlack,),
+                    Text("-0.100",style:Font().bodyBlack,)
+                  ],
+                ),
+                ConstWigdet().thinDivider(),
+                Row(
+                  mainAxisAlignment:MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text("Time:",style:Font().bodyBlack,),
+                    Text("12",style:Font().bodyBlack,)
+                  ],
+                ),
+                ConstWigdet().thinDivider(),
+                Row(
+                  mainAxisAlignment:MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text("Note:",style:Font().bodyBlack,),
+                    Text(text,style:Font().bodyBlack,)
+                  ],
+                ),
+                ConstWigdet().thinDivider(),
+                Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: Row(
+                    mainAxisAlignment:MainAxisAlignment.spaceBetween,
+                    children: [
+                      IconButton(
+                        onPressed:(){},
+                        icon:Image.asset("assets/images/pencil.png",width:35,height:35,),),
+                      IconButton(
+                        onPressed:(){},
+                        icon:Image.asset("assets/images/vip.png",width:40,height:40,),),
+                      IconButton(
+                        onPressed:(){},
+                        icon:Image.asset("assets/images/delete.png",width:50,height:50,),),
+                    ],
+                  ),
+                )
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }
