@@ -7,14 +7,12 @@ class CurvedListItem extends StatelessWidget {
     this.title,
     this.subTitile,
     this.time,
-    this.icon,
     this.color,
     this.nextColor,
   });
   final String? title;
   final String? time;
   final String? subTitile;
-  final IconData? icon;
   final Color? color;
   final Color? nextColor;
 
@@ -35,7 +33,7 @@ class CurvedListItem extends StatelessWidget {
           left: 32,
         ),
         child:ListTile(
-          leading:Icon(icon??Icons.wallet,size:30,),
+          leading:Image.asset("assets/images/payment.png",height:40,width: 40,),
           title:Text(time??"12", style:Font().bodyBlack,),
           subtitle: Text(title??"This is your record", style:Font().headingBlack,),
           onTap:(){
