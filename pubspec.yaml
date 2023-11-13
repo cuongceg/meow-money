@@ -51,6 +51,10 @@ dependencies:
   flutter_floating_bottom_bar: ^1.2.0
   quickalert: ^1.0.2
   fl_chart: ^0.64.0
+  image_picker: ^1.0.4
+  carousel_slider: ^4.2.1
+  percent_indicator: ^4.2.3
+  choice: ^2.3.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
