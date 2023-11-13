@@ -28,31 +28,36 @@ class _BillChartState extends State<BillChart> {
           child: Text("Expenses:",style:Font().headingBlack,),
         ),
         const Charts(),
-        const Expenses(text:"Tuition fee"),
-        const Expenses(text:"Clothes"),
-        const Expenses(text:"Food"),
+        Expenses(text:"Tuition fee",color: Colors.red.shade400,),
+        Expenses(text:"Clothes",color:Colors.yellow.shade400,),
+        Expenses(text:"Food",color: Colors.orange.shade400,),
         ConstWigdet().thinDivider(),
         Padding(
           padding: const EdgeInsets.only(right:0,top:20),
           child: Text("Incomes:",style:Font().headingBlack,),
         ),
         const Charts(),
-        const Expenses(text:"Tuition fee"),
-        const Expenses(text:"Clothes"),
-        const Expenses(text:"Food"),
+        Expenses(text:"Tuition fee",color: Colors.red.shade400,),
+        Expenses(text:"Clothes",color:Colors.yellow.shade400,),
+        Expenses(text:"Food",color: Colors.orange.shade400,),
       ],
     );
   }
 }
 
 class Expenses extends StatelessWidget{
-  const Expenses({super.key,required this.text});
+  const Expenses({super.key,required this.text,required this.color});
   final String text;
+  final Color color;
   @override
   Widget build(BuildContext context){
     return ListTile(
-      leading:const Icon(Icons.wallet,size:30,),
+      leading:Image.asset("assets/images/payment.png",height:40,width:40,),
       title:Text(text, style:Font().bodyBlack,),
+      subtitle: Container(
+        color: color,
+        height: 5,
+      ),
       onTap:(){
         QuickAlert.show(
           context: context,
