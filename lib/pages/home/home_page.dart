@@ -1,8 +1,10 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_floating_bottom_bar/flutter_floating_bottom_bar.dart';
+import 'package:monney_management/pages/home/add_money/add_money.dart';
 import 'package:monney_management/pages/home/bill_history_screen/bill_history.dart';
 import 'package:monney_management/pages/home/main_screen/record.dart';
+import 'package:monney_management/pages/home/profile/profile_screen.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key}) : super(key: key);
@@ -50,8 +52,6 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
   @override
   Widget build(BuildContext context) {
     final Color unselectedColor = colors[currentPage].computeLuminance() < 0.5 ? Colors.black : Colors.white;
-    final Color unselectedColorReverse = colors[currentPage].computeLuminance() < 0.5 ? Colors.white : Colors.black;
-
     return SafeArea(
       child: Scaffold(
         body: BottomBar(
@@ -62,18 +62,16 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
           curve: Curves.decelerate,
           showIcon: true,
           width: MediaQuery.of(context).size.width * 0.8,
-          barColor: colors[currentPage].computeLuminance() > 0.5 ? Colors.black : Colors.white,
+          barColor: Colors.white,
           start: 2,
           end: 0,
           offset: 10,
-          barAlignment: const Alignment(0.1,0.9),
+          barAlignment: const Alignment(0.1,0.85),
           iconHeight: 30,
           iconWidth: 30,
-          reverse: false,
-          hideOnScroll: true,
+          reverse: true,
+          hideOnScroll: false,
           scrollOpposite: false,
-          onBottomBarHidden: () {},
-          onBottomBarShown: () {},
           body: (context, controller) => TabBarView(
             controller: tabController,
             dragStartBehavior: DragStartBehavior.down,
@@ -81,8 +79,8 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
             children:const <Widget>[
               Record(),
               BillHistory(),
-              Text('Trang 1'),
-              Text('Trang 1'),
+              Add(),
+              ProfileScreen()
             ]
           ),
           child:TabBar(
