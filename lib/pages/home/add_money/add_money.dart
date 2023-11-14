@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:monney_management/const_value.dart';
-import 'package:monney_management/services/database.dart';
+//import 'package:monney_management/services/database.dart';
 import 'package:monney_management/models/user.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter/foundation.dart';
 import 'package:provider/provider.dart';
 import 'package:choice/choice.dart';
 import 'package:quickalert/quickalert.dart';
+import 'package:flutter_simple_calculator/flutter_simple_calculator.dart';
 
 class Add extends StatefulWidget {
   const Add({super.key});
@@ -15,9 +17,9 @@ class Add extends StatefulWidget {
 }
 
 class _AddState extends State<Add> {
-  String? money,note;
+  String? note;
   DateTime? date;
-  final moneyController=TextEditingController();
+  double _currentValue =0;
   final noteController=TextEditingController();
   final dateEditingController=TextEditingController();
   List<String> valueChoose=[];
@@ -33,13 +35,14 @@ class _AddState extends State<Add> {
     final formKey=GlobalKey<FormState>();
     final double widthR=MediaQuery.of(context).size.width;
     final double heightR=MediaQuery.of(context).size.height;
-    List<String>choices=["Cosmetic",'Clothes','Food','Pet','Travel'];
+    List<String>choices=["Cosmetic",'Clothes','Food','Pet','Travel',"Vehicles"];
     List<String>imageChoose=[
       'assets/images/cosmetic.png',
       'assets/images/clothes-hanger.png',
       'assets/images/burger.png',
       'assets/images/pets.png',
       'assets/images/travel.png',
+      'assets/images/car.png'
     ];
     return Scaffold(
       backgroundColor: Colors.orange.shade100,
@@ -53,24 +56,22 @@ class _AddState extends State<Add> {
             children: [
               Positioned(
                 top: heightR*0.15,
-                child: ClipRRect(
-                    borderRadius: BorderRadius.circular(40),
-                    child:ShaderMask(
+                child: ShaderMask(
                       // gradient layer
                       shaderCallback: (bound) {
                         return  LinearGradient(
                             end: FractionalOffset.topCenter,
                             begin: FractionalOffset.bottomCenter,
                             colors: [
-                              Colors.transparent,
-                              Colors.orange.shade50,
+                              Colors.white70,
+                              Colors.orange.shade100,
                             ],
-                            stops:const [0.3, 0.7])
+                            stops:const [0.0, 0.8])
                             .createShader(bound);
                       },
                       blendMode: BlendMode.srcOver,
                       child:Image.asset("assets/images/cat-money4.png",height:heightR*0.85,width:widthR,fit: BoxFit.cover,),
-                    )),
+                    ),
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 30,right: 30,top: 100),
@@ -81,23 +82,35 @@ class _AddState extends State<Add> {
                       "Enter your bills",style:Font().headingBlack,
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(top:40),
-                      child: TextFormField(
-                        validator:(val){
-                          if(val==null||val.isEmpty){
-                            return "Enter your money bill";
-                          }
-                          else{
-                            return null;
-                          }
-                        },
-                        controller: moneyController,
-                        onChanged: (text){
-                          setState(() {
-                            money=text;
-                          });
-                        },
-                        decoration: ConstWigdet().inputDecoration("Your money"),
+                      padding:const EdgeInsets.only(top: 30),
+                      child: Container(
+                        width: widthR*0.9,
+                        height: 60,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(40),
+                          border: Border.all(color: Colors.black,width: 2.0),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            TextButton(
+                              child: Text(_currentValue==0?"Enter money (.000)":_currentValue.toString(),style:Font().bodyBlack,),
+                              onPressed: (){
+                                showModalBottomSheet(
+                                    context: context,
+                                    builder: (BuildContext context){
+                                      return SizedBox(
+                                        width: widthR,
+                                        height: heightR/2,
+                                        child: cal(),
+                                      );
+                                    }
+                                );
+                              },
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                     Padding(
@@ -126,7 +139,7 @@ class _AddState extends State<Add> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Image.asset("assets/images/kitty_write.png",width:50,height: 50,),
+                          Image.asset("assets/images/kitty_write.png",width:40,height: 40,),
                           TextButton(
                               onPressed:(){
                                 QuickAlert.show(
@@ -217,6 +230,36 @@ class _AddState extends State<Add> {
             ],
           ),
         )
+      ),
+    );
+  }
+  Widget cal(){
+    return SimpleCalculator(
+      value: _currentValue,
+      hideExpression: true,
+      hideSurroundingBorder: true,
+      autofocus: true,
+      onChanged:(key,value,expression){
+        setState(() {
+          _currentValue=value??0;
+        });
+        if (kDebugMode) {
+          print('$key\t$value\t$expression');
+        }
+      },
+      theme: CalculatorThemeData(
+        borderColor: Colors.black,
+        borderWidth: 2,
+        displayColor: Colors.orange.shade100,
+        displayStyle: const TextStyle(fontSize: 80, color: Colors.black),
+        expressionColor: Colors.indigo,
+        expressionStyle: const TextStyle(fontSize: 20, color: Colors.white),
+        operatorColor: Colors.lightGreen,
+        operatorStyle: const TextStyle(fontSize: 30, color: Colors.white),
+        commandColor: Colors.brown,
+        commandStyle: const TextStyle(fontSize: 30, color: Colors.white),
+        numColor: Colors.grey,
+        numStyle: const TextStyle(fontSize: 50, color: Colors.white),
       ),
     );
   }
