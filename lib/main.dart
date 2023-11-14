@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:get/get.dart';
 import 'package:monney_management/models/user.dart';
 import 'package:monney_management/services/auth_service.dart';
 import 'package:monney_management/pages/splash_page.dart';
@@ -8,8 +7,6 @@ import 'package:monney_management/services/database.dart';
 import 'package:provider/provider.dart';
 import 'firebase_options.dart';
 import 'package:flutter/services.dart';
-
-
 
 void main() async{
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
@@ -30,9 +27,9 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         StreamProvider<MyUser?>.value(value: AuthService().user, initialData:null),
-        StreamProvider<List<UserInfo>?>.value(value:Database().authData, initialData: null)
+        StreamProvider<List<UserInformation>?>.value(value:Database().authData, initialData: null)
       ],
-      child:const GetMaterialApp(
+      child:const MaterialApp(
           debugShowCheckedModeBanner: false,
           title: 'Finance Management',
           home: Myscreen(),
