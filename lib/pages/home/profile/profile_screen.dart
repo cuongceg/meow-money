@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:monney_management/const_value.dart';
+import 'package:monney_management/models/user.dart';
+import 'package:monney_management/pages/home/profile/edit_profile.dart';
 import 'package:monney_management/services/auth_service.dart';
 import 'package:quickalert/quickalert.dart';
 import 'set_goals.dart';
 import 'items.dart';
+import 'dart:io';
+import 'package:provider/provider.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
@@ -15,6 +19,8 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  double _currentSliderValue=20;
+  bool hidden=false;
   List<Widget>items=[
     Items(title:"Food", goals:10000,color:Colors.red.shade400,),
     Items(title:"Clothes", goals:10000,color:Colors.yellow.shade400),
@@ -23,6 +29,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
   ];
   @override
   Widget build(BuildContext context) {
+    final authList=Provider.of<List<UserInformation>?>(context);
+    final user=Provider.of<MyUser?>(context);
+    int index=0;
+    for(int i=0;i<authList!.length;i++){
+      if(authList[i].uid==user!.uid){
+        index=i;
+      }
+    }
     double heightR=MediaQuery.of(context).size.height;
     //double widthR=MediaQuery.of(context).size.width;
     return Scaffold(
@@ -30,17 +44,26 @@ class _ProfileScreenState extends State<ProfileScreen> {
       body:Column(
         mainAxisAlignment:MainAxisAlignment.start,
         children: [
-          const CircleAvatar(
-            backgroundImage:AssetImage("assets/images/napping.png"),
+          CircleAvatar(
+            backgroundImage:authList[index].asset==null?const AssetImage("assets/images/napping.png"):FileImage(File(authList[index].asset??""))as ImageProvider,
             backgroundColor:Colors.white,
             radius: 50,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text("  Do Manh Cuong",style:Font().headingBlack,),
+              Text("  ${authList[index].fullname}",style:Font().headingBlack,),
               IconButton(
                   onPressed:(){
+                    showModalBottomSheet(
+                        context: context,
+                        shape:const RoundedRectangleBorder(
+                            borderRadius:BorderRadius.only(topLeft:Radius.circular(40),topRight:Radius.circular(40))
+                        ),
+                        isScrollControlled: true,
+                        builder: (BuildContext context){
+                          return const EditProfile();
+                        });
                   },
                   icon:Image.asset("assets/images/pencil.png",height:25,width:25,)),
             ],
@@ -87,11 +110,41 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     context: context,
                     type: QuickAlertType.custom,
                     customAsset:"assets/images/cat_saving.gif",
-                    widget:CircularPercentIndicator(
-                      radius: 100,
-                      percent:0.8,
-                      progressColor: Colors.lightGreen,
-                      backgroundColor: Colors.orange.shade100,
+                    onConfirmBtnTap:(){
+                      if(!hidden){
+                        setState(() {
+                          hidden=true;
+                        });
+                      }
+                      Navigator.pop(context);
+                    },
+                    confirmBtnText:hidden?"Ok":"Save",
+                    confirmBtnTextStyle: Font().bodyWhite,
+                    confirmBtnColor: Colors.brown,
+                    title:hidden?"Finish 34.000/${_currentSliderValue.toStringAsFixed(3)}":"Set your saving money",
+                    titleColor: Colors.black,
+                    text:hidden?"":"Once you press save you can't change it until it's done",
+                    widget:Column(
+                      children: [
+                        hidden?CircularPercentIndicator(
+                          radius: 100,
+                          percent:0.8,
+                          progressColor: Colors.lightGreen,
+                          backgroundColor: Colors.orange.shade100,
+                        ):Slider(
+                            value: _currentSliderValue,
+                            max: 55,
+                            min:5,
+                            divisions:10,
+                            activeColor:Colors.red.shade200,
+                            inactiveColor:Colors.lightGreen,
+                            label: "${_currentSliderValue.round().toStringAsFixed(3)}.000",
+                            onChanged:(double value){
+                              setState(() {
+                                _currentSliderValue=value;
+                              });
+                            }),
+                      ],
                     )
                 );
               },
