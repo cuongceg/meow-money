@@ -1,7 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:monney_management/models/user.dart';
-import 'package:monney_management/services/database.dart';
-
 
 class AuthService{
   final FirebaseAuth auth = FirebaseAuth.instance;
@@ -15,7 +13,6 @@ class AuthService{
     try{
       UserCredential result= await auth.createUserWithEmailAndPassword(email: email, password: password);
       User? user=result.user;
-      await Database(uid:user!.uid).updateData('your name','your fullname',"gender");
       return userFromFirebase(user);
     }
     catch(e){
