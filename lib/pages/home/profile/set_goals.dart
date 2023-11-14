@@ -12,13 +12,14 @@ class Settings extends StatefulWidget {
 class _SettingsState extends State<Settings> {
   List<String>typeList=['Only Month','Year','Every Month'];
   List<String>months = ['Jan', 'Feb', 'Mar', 'Apr', 'May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  List<String>choices=["Cosmetic",'Clothes','Food','Pet','Travel','All'];
+  List<String>choices=["Cosmetic",'Clothes','Food','Pet','Travel',"Vehicles",'All'];
   List<String>imageChoose=[
     'assets/images/cosmetic.png',
     'assets/images/clothes-hanger.png',
     'assets/images/burger.png',
     'assets/images/pets.png',
     'assets/images/travel.png',
+    'assets/images/car.png',
     'assets/images/check.png',
   ];
   String? typeChoose,monthChoose;
