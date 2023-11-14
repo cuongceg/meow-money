@@ -26,7 +26,19 @@ class _RecordState extends State<Record> {
   ];
   @override
   Widget build(BuildContext context) {
-    final authInfo = Provider.of<List<UserInfo>?>(context);
+    final authInfo = Provider.of<List<UserInformation>?>(context);
+    final user = Provider.of<MyUser>(context);
+    String username='';
+    int index=0;
+    if(authInfo!=null){
+      for(int i=0;i<authInfo.length;i++){
+        if(authInfo[i].uid==user.uid){
+          index=i;
+          break;
+        }
+      }
+      username=authInfo[index].username??"";
+    }
     double heightR= MediaQuery.of(context).size.height;
     double widthR= MediaQuery.of(context).size.width;
     return AnnotatedRegion<SystemUiOverlayStyle>(
@@ -40,7 +52,7 @@ class _RecordState extends State<Record> {
             return <Widget>[
               SliverAppBar(
                 leading:const CircleAvatar(backgroundImage:AssetImage("assets/images/napping.png"),backgroundColor:Colors.white,radius:30,),
-                title:Text(authInfo!=null?"Hello ${authInfo[1].username}":"Welcome back",style:Font().bodyBlack,),
+                title:Text("Hello $username",style:Font().bodyBlack,),
                 actions: [
                   IconButton(
                     onPressed:(){
