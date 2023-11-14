@@ -1,9 +1,8 @@
-import 'package:flutter/material.dart';
+ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:monney_management/const_value.dart';
 import 'package:monney_management/pages/home/bill_history_screen/bill_charts.dart';
 import 'package:quickalert/quickalert.dart';
-
 
 class BillHistory extends StatefulWidget {
   const BillHistory({super.key});
@@ -14,6 +13,9 @@ class BillHistory extends StatefulWidget {
 
 class _BillHistoryState extends State<BillHistory> {
   bool innerBoxIsScroll=true;
+  int? groupValue;
+  DateTime? date;
+  List<String>months = ['Jan', 'Feb', 'Mar', 'Apr', 'May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   @override
   Widget build(BuildContext context) {
     double widthR=MediaQuery.of(context).size.width;
@@ -33,15 +35,59 @@ class _BillHistoryState extends State<BillHistory> {
                 centerTitle: true,
                 backgroundColor:Colors.orange.shade100,
                 actions: [
-                  IconButton(
-                      onPressed:(){
-                        QuickAlert.show(
-                            context: context,
-                            type:QuickAlertType.info,
-                          title:"Select day"
-                        );
-                      },
-                      icon:Image.asset("assets/images/sleepover-party.png",height:40,width:40,),)
+                  MenuAnchor(
+                    builder: (BuildContext context,MenuController controller,Widget? child){
+                      return IconButton(
+                        onPressed: () {
+                          if (controller.isOpen) {
+                            controller.close();
+                          } else {
+                            controller.open();
+                          }
+                        },
+                        icon:Image.asset("assets/images/sleepover-party.png",height:40,width:40,),);
+                    },
+                      menuChildren: [
+                        MenuItemButton(
+                          child: Text("Select day",style:Font().bodyBlack,),
+                          onPressed:()async{
+                            await _selectDate(context);
+                          },),
+                        MenuItemButton(
+                          child:Text("Select month",style:Font().bodyBlack,),
+                          onPressed: (){
+                            showModalBottomSheet(
+                                context: context,
+                                builder:(BuildContext context){
+                                  return SizedBox(
+                                    height: heightR/2,
+                                    child: Column(
+                                      children: [
+                                        Expanded(
+                                          child: ListView.builder(
+                                            itemBuilder:(BuildContext context,int index){
+                                              return RadioListTile<int>(
+                                                  value: index,
+                                                  groupValue: groupValue,
+                                                  title: Text(months[index],style:Font().bodyBlack,),
+                                                  toggleable: true,
+                                                  onChanged: (int? value){
+                                                    setState(() {
+                                                      groupValue=value;
+                                                    });
+                                                  });
+                                            },
+                                            itemCount: 12,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                }
+                            );
+                          },
+                        )
+                      ])
                 ],
                 floating:false,
                 flexibleSpace:FlexibleSpaceBar(
@@ -107,5 +153,19 @@ class _BillHistoryState extends State<BillHistory> {
         ),
       ),
     );
+  }
+  Future<void> _selectDate(BuildContext context) async {
+    final now = DateTime.now();
+    final DateTime? picked = await showDatePicker(
+        context: context,
+        initialDate: date ?? now,
+        firstDate: now,
+        lastDate: DateTime(2101));
+    if (picked != null && picked != date) {
+      print('$picked');
+      setState(() {
+        date = picked;
+      });
+    }
   }
 }
