@@ -1,5 +1,4 @@
 import 'package:google_fonts/google_fonts.dart';
-import 'package:get/get.dart';
 import 'package:monney_management/pages/login/login.dart';
 import 'package:flutter/material.dart';
 class Font{
@@ -53,7 +52,8 @@ class ConstWigdet{
         ),
         fillColor: Colors.white,
         filled: true,
-        labelText: label
+        labelText: label,
+        labelStyle:Font().bodyBlack
     );
   }
   Decoration? boxDecoration(){
@@ -87,7 +87,7 @@ class ConstAppBar{
                   icon: const Icon(
                     Icons.arrow_back_rounded, size: 30, color: Colors.black,),
                   onPressed: () {
-                    Get.to(() => const Login());
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>const Login()));
                   }
               );
             }
