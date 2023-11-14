@@ -1,8 +1,6 @@
-import 'package:get/get.dart';
 import 'package:monney_management/const_value.dart';
 import 'package:monney_management/services/auth_service.dart';
 import 'package:monney_management/services/database.dart';
-import 'package:monney_management/models/user.dart';
 import 'package:monney_management/pages/login/login.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -90,7 +88,7 @@ class MySignupState extends State<SignUp>{
                               }
                               else{
                                 // create a profile base on unique uid
-                                await Database(uid:result.uid).updateData(userName,fullName,'Male');
+                                await Database(uid:result.uid).updateData(userName,fullName,null);
                                 showModalBottomSheet<void>(
                                   context: context,
                                   builder: (BuildContext context) {
@@ -113,7 +111,7 @@ class MySignupState extends State<SignUp>{
                                                 ),
                                                 child: TextButton(
                                                   child:Text('Sign in',style:Font().bodyWhite,),
-                                                  onPressed: () => Get.to(()=>const Login()),
+                                                  onPressed: () => Navigator.push(context,MaterialPageRoute(builder: (context)=>const Login())),
                                                 ),
                                               ),
                                             ),
