@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 import 'package:monney_management/const_value.dart';
 import 'package:monney_management/services/auth_service.dart';
 import 'package:provider/provider.dart';
 import 'package:monney_management/models/user.dart';
+import 'package:monney_management/models/money.dart';
 import 'curved_list_item.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class Record extends StatefulWidget {
   const Record({super.key});
@@ -14,7 +17,10 @@ class Record extends StatefulWidget {
 }
 
 class _RecordState extends State<Record> {
-  bool innerBoxIsScroll=true;
+  TextStyle fontBold=GoogleFonts.roboto(fontSize: 18,color: Colors.black,fontWeight: FontWeight.bold);
+  TextStyle fontBigBold=GoogleFonts.roboto(fontSize: 20,color: Colors.black,fontWeight: FontWeight.bold);
+  DateFormat formatMonth=DateFormat.MMMM('en_US');
+  DateFormat format=DateFormat('dd/MM/yyyy');
   List<Color>colorListItems=[
     Colors.green.shade100,
     Colors.lightBlue.shade100,
@@ -28,6 +34,8 @@ class _RecordState extends State<Record> {
   Widget build(BuildContext context) {
     final authInfo = Provider.of<List<UserInformation>?>(context);
     final user = Provider.of<MyUser>(context);
+    final billClothesList=Provider.of<List<BillsClothes>?>(context);
+    final billCosmeticList=Provider.of<List<BillsCosmetic>?>(context);
     String username='';
     int index=0;
     if(authInfo!=null){
@@ -39,6 +47,29 @@ class _RecordState extends State<Record> {
       }
       username=authInfo[index].username??"";
     }
+    int cnt=0;
+    int sum=0;
+    double expenses=0;
+    List product=[];
+    if(billClothesList!=null){
+      cnt=billClothesList.length>=7?7:billClothesList.length;
+      for(int i=0;i<cnt;i++){
+        expenses+=double.parse(billClothesList[i].money);
+        product.add(billClothesList[i]);
+      }
+    }
+    if(billCosmeticList!=null){
+      cnt=(billCosmeticList.length+cnt)>=7?7:(billCosmeticList.length+cnt);
+      for(int i=0;i<billCosmeticList.length;i++){
+        expenses+=double.parse(billCosmeticList[i].money);
+        // money.add((double.parse(billCosmeticList[i].money)>1000)?(double.parse(billCosmeticList[i].money)/1000).toStringAsFixed(3):billCosmeticList[i].money);
+        // time.add(format.format(billCosmeticList[i].dateTime));
+        product.add(billCosmeticList[i]);
+      }
+      expenses/=1000;
+    }
+    product.sort((a,b)=> a.nowDateTime.compareTo(b.nowDateTime));
+    sum=product.length;
     double heightR= MediaQuery.of(context).size.height;
     double widthR= MediaQuery.of(context).size.width;
     return AnnotatedRegion<SystemUiOverlayStyle>(
@@ -52,11 +83,14 @@ class _RecordState extends State<Record> {
             return <Widget>[
               SliverAppBar(
                 leading:const CircleAvatar(backgroundImage:AssetImage("assets/images/napping.png"),backgroundColor:Colors.white,radius:30,),
-                title:Text("Hello $username",style:Font().bodyBlack,),
+                title:Text("Hello $username",style:fontBigBold,),
                 actions: [
                   IconButton(
                     onPressed:(){
-                      AuthService().signOut();
+                      for(var bill in product){
+                        print(bill.nowDateTime);
+                      }
+                      // AuthService().signOut();
                     },
                     icon:const Icon(Icons.logout),color:Colors.black,),
                 ],
@@ -68,32 +102,32 @@ class _RecordState extends State<Record> {
                     children: [
                       Container(
                         width: widthR,
-                        height: heightR/16,
+                        height: heightR/15,
                         color: Colors.orange.shade100,
                       ),
                       Row(
                         children: [
                           Padding(
                             padding: const EdgeInsets.only(left:10,right:20,top:15),
-                            child: Text("Nov-Expenses",style: Font().headingBlack,),
+                            child: Text("${formatMonth.format(DateTime.now())}-Expenses",style:fontBold,),
                           ),
                           Padding(
                             padding: const EdgeInsets.only(left:10,right:20,top:15),
-                            child: Text("Nov-Incomes",style: Font().headingBlack,),
+                            child: Text("${formatMonth.format(DateTime.now())}-Incomes",style:fontBold,),
                           ),
                         ],
                       ),
                       Row(
                         children: [
                           Padding(
-                            padding: const EdgeInsets.only(left:10,right:100,top:15,bottom:20),
-                            child: Text("-1.690.000",style: Font().bodyBlack,),
+                            padding: const EdgeInsets.only(left:10,right:90,top:0),
+                            child: Text("-${expenses.toStringAsFixed(3)}.000",style: Font().bodyBlack,),
                           ),
                           Padding(
-                            padding: const EdgeInsets.only(left:10,right:15,top:15,bottom:20),
+                            padding: const EdgeInsets.only(left:25,right:15,top:0),
                             child: Text("+690.000",style: Font().bodyBlack,),
                           ),
-                          Expanded(child: Image.asset("assets/images/kitty.png"),)
+                          Expanded(child: Image.asset("assets/images/kitty.png",width:80,height:80,),)
                         ],
                       ),
                     ],
@@ -135,21 +169,23 @@ class _RecordState extends State<Record> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Image.asset("assets/images/kitty_write.png",width:40,height:40,),
-                      Text("The latest 7 bills",style:Font().headingBlack,),
+                      Text("The latest $cnt bills",style:Font().headingBlack,),
                       Image.asset("assets/images/kitty_computer.png",width:40,height:40,),
                     ],
                   ),
                 ),
                 Expanded(
                   child: ListView.builder(
-                      itemCount:7,
+                      itemCount:cnt,
                       itemBuilder:(context,index){
                         return CurvedListItem(
-                          title:"Bill ${index+1}:-${(index+0.1).toStringAsFixed(3)}",
-                          time:"${index+2}/11/2023",
-                          subTitile:"Tuiton month ${index+1}",
+                          title: "Bill ${index+1}:-${(double.parse(product[sum-1-index].money)>1000)?(double.parse(product[sum-1-index].money)/1000).toStringAsFixed(3):product[sum-1-index].money}.000",
+                          time: format.format(product[sum-1-index].dateTime),
+                          option: product[sum-1-index].option,
+                          note: product[sum-1-index].note,
+                          money: (double.parse(product[sum-1-index].money)>1000)?(double.parse(product[sum-1-index].money)/1000).toStringAsFixed(3):product[sum-1-index].money,
                           color:colorListItems[index],
-                          nextColor:index==6?Colors.orange.shade100:colorListItems[index+1],
+                          nextColor:index==cnt-1?Colors.orange.shade100:colorListItems[index+1],
                         );
                         }),
                 ),
