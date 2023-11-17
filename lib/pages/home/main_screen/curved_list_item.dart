@@ -1,23 +1,26 @@
+import 'package:provider/provider.dart';
 import 'package:quickalert/quickalert.dart';
 import 'package:flutter/material.dart';
 import 'package:monney_management/const_value.dart';
+import 'package:monney_management/models/money.dart';
 
 class CurvedListItem extends StatelessWidget {
   const CurvedListItem({super.key,
     this.title,
-    this.subTitile,
+    this.note,
+    this.money,
+    this.option,
     this.time,
     this.color,
     this.nextColor,
   });
-  final String? title;
-  final String? time;
-  final String? subTitile;
-  final Color? color;
-  final Color? nextColor;
+  final String? title,note,time,money,option;
+  final Color? color,nextColor;
 
   @override
   Widget build(BuildContext context) {
+    final cosmetic=Provider.of<List<BillsCosmetic>?>(context);
+    final clothes=Provider.of<List<BillsClothes>?>(context);
     return Container(
       color: nextColor,
       child: Container(
@@ -37,11 +40,13 @@ class CurvedListItem extends StatelessWidget {
           title:Text(time??"12", style:Font().bodyBlack,),
           subtitle: Text(title??"This is your record", style:Font().headingBlack,),
           onTap:(){
+            print(clothes);
+            print(cosmetic);
             QuickAlert.show(
               context: context,
               type: QuickAlertType.custom,
               title: title,
-              text: 'Details',
+              text: option??'Details',
               customAsset:"assets/images/cat_money.gif",
               widget:Padding(
                 padding: const EdgeInsets.only(top:8.0),
@@ -53,7 +58,7 @@ class CurvedListItem extends StatelessWidget {
                       mainAxisAlignment:MainAxisAlignment.spaceBetween,
                       children: [
                         Text("Amount:",style:Font().bodyBlack,),
-                        Text("-0.100",style:Font().bodyBlack,)
+                        Text("$money.000",style:Font().bodyBlack,)
                       ],
                     ),
                     ConstWigdet().thinDivider(),
@@ -69,7 +74,7 @@ class CurvedListItem extends StatelessWidget {
                       mainAxisAlignment:MainAxisAlignment.spaceBetween,
                       children: [
                         Text("Note:",style:Font().bodyBlack,),
-                        Text(subTitile??"Tuition",style:Font().bodyBlack,)
+                        Text(note??"",style:Font().bodyBlack,)
                       ],
                     ),
                     ConstWigdet().thinDivider(),
