@@ -36,40 +36,80 @@ class _RecordState extends State<Record> {
     final user = Provider.of<MyUser>(context);
     final billClothesList=Provider.of<List<BillsClothes>?>(context);
     final billCosmeticList=Provider.of<List<BillsCosmetic>?>(context);
+    final billFood=Provider.of<List<BillsFood>?>(context);
+    final billPet=Provider.of<List<BillsPet>?>(context);
+    final billTravel=Provider.of<List<BillsTravel>?>(context);
+    final billVehicles=Provider.of<List<BillsVehicles>?>(context);
+    final goals=Provider.of<List<Goals>?>(context);
+    //avatar data
     String username='';
     int index=0;
     if(authInfo!=null){
       for(int i=0;i<authInfo.length;i++){
         if(authInfo[i].uid==user.uid){
+          // get true data user
           index=i;
           break;
         }
       }
-      username=authInfo[index].username??"";
+      username=authInfo[index].username??"";//check null
     }
-    int cnt=0;
-    int sum=0;
-    double expenses=0;
+    //bill data
     List product=[];
+    int cnt=0,sum=0;//sum is product.length, cnt= sum>7?7:cnt
+    double expenses=0;//sum of money in 1 month
     if(billClothesList!=null){
-      cnt=billClothesList.length>=7?7:billClothesList.length;
-      for(int i=0;i<cnt;i++){
-        expenses+=double.parse(billClothesList[i].money);
-        product.add(billClothesList[i]);
+      for(int i=0;i<billClothesList.length;i++){
+        if(billClothesList[i].uid==user.uid){
+          expenses+=double.parse(billClothesList[i].money);
+          product.add(billClothesList[i]);
+        }
       }
     }
     if(billCosmeticList!=null){
-      cnt=(billCosmeticList.length+cnt)>=7?7:(billCosmeticList.length+cnt);
       for(int i=0;i<billCosmeticList.length;i++){
-        expenses+=double.parse(billCosmeticList[i].money);
-        // money.add((double.parse(billCosmeticList[i].money)>1000)?(double.parse(billCosmeticList[i].money)/1000).toStringAsFixed(3):billCosmeticList[i].money);
-        // time.add(format.format(billCosmeticList[i].dateTime));
-        product.add(billCosmeticList[i]);
+        if(billCosmeticList[i].uid==user.uid){
+          expenses+=double.parse(billCosmeticList[i].money);
+          product.add(billCosmeticList[i]);
+        }
       }
-      expenses/=1000;
     }
+    if(billFood!=null){
+      for(int i=0;i<billFood.length;i++){
+        if(billFood[i].uid==user.uid){
+          expenses+=double.parse(billFood[i].money);
+          product.add(billFood[i]);
+        }
+      }
+    }
+    if(billPet!=null){
+      for(int i=0;i<billPet.length;i++){
+        if(billPet[i].uid==user.uid){
+          expenses+=double.parse(billPet[i].money);
+          product.add(billPet[i]);
+        }
+      }
+    }
+    if(billTravel!=null){
+      for(int i=0;i<billTravel.length;i++){
+        if(billTravel[i].uid==user.uid){
+          expenses+=double.parse(billTravel[i].money);
+          product.add(billTravel[i]);
+        }
+      }
+    }
+    if(billVehicles!=null){
+      for(int i=0;i<billVehicles.length;i++){
+        if(billVehicles[i].uid==user.uid){
+          expenses+=double.parse(billVehicles[i].money);
+          product.add(billVehicles[i]);
+        }
+      }
+    }
+    expenses/=1000;//display dot
     product.sort((a,b)=> a.nowDateTime.compareTo(b.nowDateTime));
     sum=product.length;
+    cnt=sum>=7?7:sum;
     double heightR= MediaQuery.of(context).size.height;
     double widthR= MediaQuery.of(context).size.width;
     return AnnotatedRegion<SystemUiOverlayStyle>(
@@ -87,9 +127,7 @@ class _RecordState extends State<Record> {
                 actions: [
                   IconButton(
                     onPressed:(){
-                      for(var bill in product){
-                        print(bill.nowDateTime);
-                      }
+                      print(goals);
                       // AuthService().signOut();
                     },
                     icon:const Icon(Icons.logout),color:Colors.black,),
