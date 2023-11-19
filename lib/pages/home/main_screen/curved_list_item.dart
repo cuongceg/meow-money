@@ -1,8 +1,8 @@
-import 'package:provider/provider.dart';
+import 'package:monney_management/pages/home/main_screen/update_bill.dart';
 import 'package:quickalert/quickalert.dart';
 import 'package:flutter/material.dart';
+import 'package:monney_management/services/database.dart';
 import 'package:monney_management/const_value.dart';
-import 'package:monney_management/models/money.dart';
 
 class CurvedListItem extends StatelessWidget {
   const CurvedListItem({super.key,
@@ -13,14 +13,12 @@ class CurvedListItem extends StatelessWidget {
     this.time,
     this.color,
     this.nextColor,
+    this.idTouch,
   });
-  final String? title,note,time,money,option;
+  final String? title,note,time,money,option,idTouch;
   final Color? color,nextColor;
-
   @override
   Widget build(BuildContext context) {
-    final cosmetic=Provider.of<List<BillsCosmetic>?>(context);
-    final clothes=Provider.of<List<BillsClothes>?>(context);
     return Container(
       color: nextColor,
       child: Container(
@@ -40,8 +38,6 @@ class CurvedListItem extends StatelessWidget {
           title:Text(time??"12", style:Font().bodyBlack,),
           subtitle: Text(title??"This is your record", style:Font().headingBlack,),
           onTap:(){
-            print(clothes);
-            print(cosmetic);
             QuickAlert.show(
               context: context,
               type: QuickAlertType.custom,
@@ -84,13 +80,18 @@ class CurvedListItem extends StatelessWidget {
                         mainAxisAlignment:MainAxisAlignment.spaceBetween,
                         children: [
                           IconButton(
-                              onPressed:(){},
+                              onPressed:(){
+                                Navigator.push(context,MaterialPageRoute(builder: (context)=>UpdateBill(idTouch: idTouch??"US6sYmwwE57DxJuG2ZOA", option: option??"Details")));
+                              },
                               icon:Image.asset("assets/images/pencil.png",width:35,height:35,),),
                           IconButton(
                             onPressed:(){},
                             icon:Image.asset("assets/images/vip.png",width:40,height:40,),),
                           IconButton(
-                            onPressed:(){},
+                            onPressed:(){
+                              Database().deleteDocument(idTouch??"US6sYmwwE57DxJuG2ZOA", option??"Details");
+                              Navigator.pop(context);
+                            },
                             icon:Image.asset("assets/images/delete.png",width:50,height:50,),),
                         ],
                       ),
