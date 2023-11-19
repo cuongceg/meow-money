@@ -87,6 +87,7 @@ class _EditProfileState extends State<EditProfile> {
               ),
               child: TextButton(
                 onPressed:(){
+                  imagePath=_selectedImage?.path;
                   Database(uid: user!.uid).updateData(name, fullname,imagePath);
                   Navigator.pop(context);
                 },
