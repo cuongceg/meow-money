@@ -4,8 +4,9 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class Charts extends StatefulWidget {
-  const Charts({super.key});
-
+  const Charts({super.key,this.first,this.second,this.third,this.fourth, required this.sfirst, required this.ssecond, required this.sthird});
+  final double? first,second,third,fourth;
+  final String sfirst,ssecond,sthird;
   @override
   State<Charts> createState() => _ChartsState();
 }
@@ -28,35 +29,35 @@ class _ChartsState extends State<Charts> {
       final radius = isTouched ? 60.0 : 50.0;
       const shadows = [Shadow(color: Colors.black, blurRadius: 2)];
       switch (i) {
-        case 0:
-          return PieChartSectionData(
-              color: Colors.red.shade400,
-              value: 40,
-              title: '40%',
-              radius: radius,
-              titleStyle:chartFont(fontSize, shadows)
-          );
-        case 1:
-          return PieChartSectionData(
-              color: Colors.yellow.shade400,
-              value: 30,
-              title: '30%',
-              radius: radius,
-              titleStyle:chartFont(fontSize, shadows)
-          );
         case 2:
           return PieChartSectionData(
-              color: Colors.lightGreen,
-              value: 15,
-              title: '15%',
+              color: Colors.red.shade400,
+              value: widget.first,
+              title: widget.first!.toStringAsFixed(0),
               radius: radius,
               titleStyle:chartFont(fontSize, shadows)
           );
         case 3:
           return PieChartSectionData(
               color: Colors.orange.shade400,
-              value: 15,
-              title: '15%',
+              value: widget.second,
+              title: widget.second!.toStringAsFixed(0),
+              radius: radius,
+              titleStyle:chartFont(fontSize, shadows)
+          );
+        case 0:
+          return PieChartSectionData(
+              color: Colors.yellow.shade400,
+              value: widget.third,
+              title: widget.third!.toStringAsFixed(0),
+              radius: radius,
+              titleStyle:chartFont(fontSize, shadows)
+          );
+        case 1:
+          return PieChartSectionData(
+              color: Colors.lightGreen,
+              value: widget.fourth,
+              title: widget.fourth!.toStringAsFixed(0),
               radius: radius,
               titleStyle:chartFont(fontSize, shadows)
           );
@@ -109,29 +110,25 @@ class _ChartsState extends State<Charts> {
                       Expanded(
                         child:Indicator(
                           color:Colors.red.shade400,
-                          text:"Tuition fee",
-                          subText: "-100.000",
+                          text:widget.sfirst,
+                        ),
+                      ),
+                      Expanded(
+                        child:Indicator(
+                          color:Colors.orange.shade400,
+                          text:widget.ssecond,
                         ),
                       ),
                       Expanded(
                         child:Indicator(
                           color:Colors.yellow.shade400,
-                          text:"Clothes",
-                          subText: "-5.000",
-                        ),
-                      ),
-                      const Expanded(
-                        child:Indicator(
-                          color:Colors.orange,
-                          text:"Food",
-                          subText: "-1.000",
+                          text:widget.sthird,
                         ),
                       ),
                       const Expanded(
                         child:Indicator(
                           color:Colors.lightGreen,
                           text:"Others",
-                          subText: "-1.000",
                         ),
                       ),
                     ],
@@ -146,11 +143,9 @@ class _ChartsState extends State<Charts> {
   }
 }
 class Indicator extends StatelessWidget{
-  const Indicator({super.key,required this.text,required this.subText,required this.color});
+  const Indicator({super.key,required this.text,required this.color});
   final String text;
   final Color color;
-  final String subText;
-
   @override
   Widget build(BuildContext context){
     return ListTile(
@@ -160,7 +155,6 @@ class Indicator extends StatelessWidget{
         color:color,
       ),
       title:Text(text,style:Font().bodyBlack,),
-      subtitle:Text(subText),
     );
   }
 }
