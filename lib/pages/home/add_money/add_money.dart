@@ -4,6 +4,7 @@ import 'package:monney_management/const_value.dart';
 import 'package:monney_management/models/user.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/foundation.dart';
+import 'package:monney_management/services/database.dart';
 import 'package:provider/provider.dart';
 import 'package:choice/choice.dart';
 import 'package:quickalert/quickalert.dart';
@@ -214,7 +215,17 @@ class _AddState extends State<Add> {
                         borderRadius: BorderRadius.circular(40),
                       ),
                       child: TextButton(
-                          onPressed:(){},
+                          onPressed:(){
+                            for(int i=0;i<valueChoose.length;i++){
+                              Database(uid: user!.uid).addTestBillData(_currentValue.toString(), note, valueChoose[i],date??DateTime.now(),DateTime.now(),user.uid);
+                            }
+                            valueChoose.removeRange(0,valueChoose.length);
+                            noteController.clear();
+                            setState(() {
+                              _currentValue=0;
+                            });
+                            dateEditingController.clear();
+                          },
                           child:Text("Save",style:Font().bodyWhite,)),
                     ),
                   ],
