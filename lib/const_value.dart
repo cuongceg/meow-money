@@ -5,6 +5,7 @@ class Font{
   final welcomeWhite=GoogleFonts.pacifico(fontSize:40,color: Colors.white);
   final welcomePurple=GoogleFonts.pacifico(fontSize:40,color: Colors.purple);
   final pacificoWhite=GoogleFonts.pacifico(fontSize: 25,color: Colors.white);
+  final pacificoBlack=GoogleFonts.pacifico(fontSize: 25,color: Colors.black);
   final bodyWhite=GoogleFonts.roboto(fontSize:19,color:Colors.white);
   final bodyBlack=GoogleFonts.roboto(fontSize: 19,color: Colors.black);
   final bodyError=GoogleFonts.roboto(fontSize:19,color: Colors.red);
