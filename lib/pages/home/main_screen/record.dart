@@ -224,6 +224,7 @@ class _RecordState extends State<Record> {
                           money: (double.parse(product[sum-1-index].money)>1000)?(double.parse(product[sum-1-index].money)/1000).toStringAsFixed(3):product[sum-1-index].money,
                           color:colorListItems[index],
                           nextColor:index==cnt-1?Colors.orange.shade100:colorListItems[index+1],
+                          idTouch: product[sum-1-index].idTouch,
                         );
                         }),
                 ),
