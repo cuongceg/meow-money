@@ -40,7 +40,6 @@ class _RecordState extends State<Record> {
     final billPet=Provider.of<List<BillsPet>?>(context);
     final billTravel=Provider.of<List<BillsTravel>?>(context);
     final billVehicles=Provider.of<List<BillsVehicles>?>(context);
-    final goals=Provider.of<List<Goals>?>(context);
     //avatar data
     String username='';
     int index=0;
@@ -127,8 +126,7 @@ class _RecordState extends State<Record> {
                 actions: [
                   IconButton(
                     onPressed:(){
-                      print(goals);
-                      // AuthService().signOut();
+                      AuthService().signOut();
                     },
                     icon:const Icon(Icons.logout),color:Colors.black,),
                 ],
