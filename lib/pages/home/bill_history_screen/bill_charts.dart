@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:monney_management/models/money.dart';
 import 'charts.dart';
 import 'package:monney_management/const_value.dart';
-import 'package:quickalert/quickalert.dart';
+import 'package:provider/provider.dart';
 
 class BillChart extends StatefulWidget {
-  const BillChart({super.key});
-
+  const BillChart({super.key,this.first,this.second,this.third,this.fourth, required this.sfirst, required this.ssecond, required this.sthird});
+  final double? first,second,third,fourth;
+  final String sfirst,ssecond,sthird;
   @override
   State<BillChart> createState() => _BillChartState();
 }
@@ -27,16 +30,16 @@ class _BillChartState extends State<BillChart> {
           padding: const EdgeInsets.only(top:20),
           child: Text("Expenses:",style:Font().headingBlack,),
         ),
-        const Charts(),
-        Expenses(text:"Tuition fee",color: Colors.red.shade400,),
-        Expenses(text:"Clothes",color:Colors.yellow.shade400,),
-        Expenses(text:"Food",color: Colors.orange.shade400,),
+        Charts(first:widget.first,second:widget.second,third:widget.third,fourth:widget.fourth,sfirst:widget.sfirst,ssecond:widget.ssecond,sthird: widget.sthird),
+        Expenses(text:widget.sfirst,color: Colors.red.shade400,),
+        Expenses(text:widget.ssecond,color:Colors.orange.shade400,),
+        Expenses(text:widget.sthird,color: Colors.yellow.shade400,),
         ConstWigdet().thinDivider(),
         Padding(
           padding: const EdgeInsets.only(right:0,top:20),
           child: Text("Incomes:",style:Font().headingBlack,),
         ),
-        const Charts(),
+        Charts(first:widget.first,second:widget.second,third:widget.third,fourth:widget.fourth,sfirst:widget.sfirst,ssecond:widget.ssecond,sthird: widget.sthird),
         Expenses(text:"Tuition fee",color: Colors.red.shade400,),
         Expenses(text:"Clothes",color:Colors.yellow.shade400,),
         Expenses(text:"Food",color: Colors.orange.shade400,),
@@ -51,6 +54,52 @@ class Expenses extends StatelessWidget{
   final Color color;
   @override
   Widget build(BuildContext context){
+    final double heightR=MediaQuery.of(context).size.height;
+    DateFormat format=DateFormat('dd-MM-yyyy');
+    final billClothesList=Provider.of<List<BillsClothes>?>(context);
+    final billCosmeticList=Provider.of<List<BillsCosmetic>?>(context);
+    final billFood=Provider.of<List<BillsFood>?>(context);
+    final billPet=Provider.of<List<BillsPet>?>(context);
+    final billTravel=Provider.of<List<BillsTravel>?>(context);
+    final billVehicles=Provider.of<List<BillsVehicles>?>(context);
+    List product=[];
+    switch(text){
+      case "Clothes":
+        if(billClothesList!=null){
+          product.addAll(billClothesList);
+        }
+        break;
+      case "Cosmetic":
+        if(billCosmeticList!=null){
+          product.addAll(billCosmeticList);
+        }
+        break;
+      case "Food":
+        if(billFood!=null){
+          product.addAll(billFood);
+        }
+        break;
+      case "Pet":
+        if(billPet!=null){
+          product.addAll(billPet);
+        }
+        break;
+      case "Travel":
+        if(billTravel!=null){
+          product.addAll(billTravel);
+        }
+        break;
+      case "Vehicles":
+        if(billVehicles!=null){
+          product.addAll(billVehicles);
+        }
+        break;
+      default:
+        if(billClothesList!=null){
+          product.addAll(billClothesList);
+        }
+        break;
+    }
     return ListTile(
       leading:Image.asset("assets/images/payment.png",height:40,width:40,),
       title:Text(text, style:Font().bodyBlack,),
@@ -59,62 +108,48 @@ class Expenses extends StatelessWidget{
         height: 5,
       ),
       onTap:(){
-        QuickAlert.show(
-          context: context,
-          type: QuickAlertType.custom,
-          title:"Tuition fee",
-          text: 'Details',
-          customAsset:"assets/images/cat_money.gif",
-          widget:Padding(
-            padding: const EdgeInsets.only(top:8.0),
-            child: Column(
-              mainAxisAlignment:MainAxisAlignment.center,
-              children: <Widget>[
-                ConstWigdet().thinDivider(),
-                Row(
-                  mainAxisAlignment:MainAxisAlignment.spaceBetween,
+        showModalBottomSheet(
+            context: context,
+            builder:(BuildContext context){
+              return Container(
+                decoration:  BoxDecoration(
+                  color: Colors.orange.shade100,
+                  border: Border.all(color: Colors.black),
+                  borderRadius: const BorderRadius.only(topRight:Radius.circular(40),topLeft:Radius.circular(40)),
+                ),
+                height: heightR/2,
+                child: Column(
                   children: [
-                    Text("Amount:",style:Font().bodyBlack,),
-                    Text("-0.100",style:Font().bodyBlack,)
+                    Text("Bills History",style:Font().headingBlack,),
+                    ConstWigdet().thickDivider(),
+                    Expanded(
+                      child: ListView.builder(
+                          itemCount: product.length,
+                          itemBuilder:(context,index){
+                            return Column(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(10.0),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text("Bill ${index+1}:${(double.parse(product[index].money)>1000)?(double.parse(product[index].money)/1000).toStringAsFixed(3):product[index].money}.000",style:Font().bodyBlack,),
+                                      Text(format.format(product[index].dateTime),style:Font().bodyBlack,),
+                                    ],
+                                  ),
+                                ),
+                                ConstWigdet().thinDivider()
+                              ],
+                            );
+                          }),
+                    ),
                   ],
                 ),
-                ConstWigdet().thinDivider(),
-                Row(
-                  mainAxisAlignment:MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text("Time:",style:Font().bodyBlack,),
-                    Text("12",style:Font().bodyBlack,)
-                  ],
-                ),
-                ConstWigdet().thinDivider(),
-                Row(
-                  mainAxisAlignment:MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text("Note:",style:Font().bodyBlack,),
-                    Text(text,style:Font().bodyBlack,)
-                  ],
-                ),
-                ConstWigdet().thinDivider(),
-                Padding(
-                  padding: const EdgeInsets.only(top: 8.0),
-                  child: Row(
-                    mainAxisAlignment:MainAxisAlignment.spaceBetween,
-                    children: [
-                      IconButton(
-                        onPressed:(){},
-                        icon:Image.asset("assets/images/pencil.png",width:35,height:35,),),
-                      IconButton(
-                        onPressed:(){},
-                        icon:Image.asset("assets/images/vip.png",width:40,height:40,),),
-                      IconButton(
-                        onPressed:(){},
-                        icon:Image.asset("assets/images/delete.png",width:50,height:50,),),
-                    ],
-                  ),
-                )
-              ],
-            ),
-          ),
+              );
+            },
+            shape:const RoundedRectangleBorder(
+                borderRadius:BorderRadius.only(topLeft:Radius.circular(40),topRight:Radius.circular(40))
+            )
         );
       },
     );
