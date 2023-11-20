@@ -2,6 +2,7 @@ import 'package:monney_management/const_value.dart';
 import 'package:monney_management/services/auth_service.dart';
 import 'package:monney_management/services/database.dart';
 import 'package:monney_management/pages/login/login.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -28,19 +29,20 @@ class MySignupState extends State<SignUp>{
     // hint password or not
     hint =!hint;
   }
+  List<String>choices=["Cosmetic",'Clothes','Food','Pet','Travel',"Vehicles",'All'];
 
   @override
   Widget build(BuildContext context){
     double heightR=MediaQuery.of(context).size.height;
     double widthR=MediaQuery.of(context).size.width;
     return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: const SystemUiOverlayStyle(
-        statusBarColor: Colors.white,
+      value:SystemUiOverlayStyle(
+        statusBarColor: Colors.orange.shade50,
       ),
       child:SafeArea(//use the color of status bar
         child: Scaffold(
           appBar: ConstAppBar().goBackToLogin('Sign up'),
-          backgroundColor: Colors.white,
+          backgroundColor: Colors.orange.shade50,
           body: Center(
               child:Form(
                 key:_formKey,
@@ -58,7 +60,7 @@ class MySignupState extends State<SignUp>{
                               Navigator.pop(context),
                           child:Text(
                             "Sign in",
-                            style:Font().headingPurple,
+                            style:GoogleFonts.pacifico(fontSize:24,color: Colors.orange),
                           ),
                         ),
                       ],
@@ -89,6 +91,9 @@ class MySignupState extends State<SignUp>{
                               else{
                                 // create a profile base on unique uid
                                 await Database(uid:result.uid).updateData(userName,fullName,null);
+                                for(int i=0;i<choices.length-1;i++){
+                                  Database(uid: result.uid).setGoals("10.000",choices[i]);
+                                }
                                 showModalBottomSheet<void>(
                                   context: context,
                                   builder: (BuildContext context) {
@@ -254,7 +259,7 @@ class MySignupState extends State<SignUp>{
       ),
       focusedBorder: OutlineInputBorder(
           borderRadius: ConstValue().borderRadius,
-          borderSide:ConstValue().borderSidePurple
+          borderSide:ConstValue().borderSideOrange
       ),
       fillColor: Colors.white,
       filled: true,
