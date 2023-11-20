@@ -96,10 +96,17 @@ class MySignupState extends State<SignUp>{
                                 }
                                 showModalBottomSheet<void>(
                                   context: context,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius:BorderRadius.circular(40),
+                                  ),
                                   builder: (BuildContext context) {
-                                    return SizedBox(
+                                    return Container(
                                       height:heightR/5,
                                       width: widthR,
+                                      decoration:BoxDecoration(
+                                        borderRadius:BorderRadius.circular(40),
+                                        color: Colors.orange.shade100,
+                                      ),
                                       child: Center(
                                         child: Column(
                                           mainAxisAlignment: MainAxisAlignment.center,
@@ -108,12 +115,9 @@ class MySignupState extends State<SignUp>{
                                             Padding(
                                               padding: const EdgeInsets.all(20.0),
                                               child: Container(
-                                                width: widthR/4,
-                                                height: heightR/15,
-                                                decoration: BoxDecoration(
-                                                    borderRadius:ConstValue().borderRadius,
-                                                    color: Colors.purple[800]
-                                                ),
+                                                width: widthR/2,
+                                                height:50,
+                                                decoration:ConstWigdet().boxDecoration(),
                                                 child: TextButton(
                                                   child:Text('Sign in',style:Font().bodyWhite,),
                                                   onPressed: () => Navigator.push(context,MaterialPageRoute(builder: (context)=>const Login())),
