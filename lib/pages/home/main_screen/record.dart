@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:monney_management/const_value.dart';
+import 'package:monney_management/pages/home/add_money/add_money.dart';
 import 'package:monney_management/services/auth_service.dart';
 import 'package:provider/provider.dart';
 import 'package:monney_management/models/user.dart';
@@ -211,7 +212,7 @@ class _RecordState extends State<Record> {
                   ),
                 ),
                 Expanded(
-                  child: ListView.builder(
+                  child:product.isNotEmpty?ListView.builder(
                       itemCount:cnt,
                       itemBuilder:(context,index){
                         return CurvedListItem(
@@ -224,7 +225,22 @@ class _RecordState extends State<Record> {
                           nextColor:index==cnt-1?Colors.orange.shade100:colorListItems[index+1],
                           idTouch: product[sum-1-index].idTouch,
                         );
-                        }),
+                        }):
+                  SizedBox(
+                    child: Padding(
+                      padding:const EdgeInsets.only(top: 30),
+                      child: Column(
+                        children: [
+                          Text('Go to add your first bill',style:Font().headingBlack,),
+                          IconButton(
+                              onPressed:(){
+                                Navigator.push(context,MaterialPageRoute(builder: (context)=>const Add()));
+                              },
+                              icon: Image.asset("assets/images/paw-print.png",height:50,width:50,))
+                        ],
+                      ),
+                    ),
+                  ),
                 ),
               ],
             ),
