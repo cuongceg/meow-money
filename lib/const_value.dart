@@ -3,7 +3,7 @@ import 'package:monney_management/pages/login/login.dart';
 import 'package:flutter/material.dart';
 class Font{
   final welcomeWhite=GoogleFonts.pacifico(fontSize:40,color: Colors.white);
-  final welcomePurple=GoogleFonts.pacifico(fontSize:40,color: Colors.purple);
+  final welcomeBlack=GoogleFonts.pacifico(fontSize:40,color: Colors.black);
   final pacificoWhite=GoogleFonts.pacifico(fontSize: 25,color: Colors.white);
   final pacificoBlack=GoogleFonts.pacifico(fontSize: 25,color: Colors.black);
   final bodyWhite=GoogleFonts.roboto(fontSize:19,color:Colors.white);
@@ -19,7 +19,7 @@ class Font{
 
 class ConstValue{
   BorderRadius borderRadius=BorderRadius.circular(40);
-  BorderSide borderSidePurple=const BorderSide(color: Colors.deepPurple,width:2.0);
+  BorderSide borderSideOrange=BorderSide(color: Colors.orange.shade800,width:2.0);
   BorderSide borderSideWhite=const BorderSide(color: Colors.white,width:2.0);
   BorderSide borderSideBlack=const BorderSide(color: Colors.black,width:2.0);
   EdgeInsets edgeInsets=const EdgeInsets.symmetric(vertical: 20,horizontal:50);
@@ -49,7 +49,7 @@ class ConstWigdet{
         ),
         focusedBorder: OutlineInputBorder(
             borderRadius: ConstValue().borderRadius,
-            borderSide:ConstValue().borderSidePurple
+            borderSide:ConstValue().borderSideOrange
         ),
         fillColor: Colors.white,
         filled: true,
@@ -63,16 +63,24 @@ class ConstWigdet{
         begin: Alignment.topCenter,
         end: Alignment.bottomCenter,
         colors: [
-          Colors.purple.shade200,
-          Colors.purple.shade800
+          Colors.orange.shade200,
+          Colors.orange.shade400
         ],
         stops:const [
           0.1,
-          0.99
+          0.8
         ],// red to yellow
         tileMode: TileMode.repeated, // repeats the gradient over the canvas
       ),
       borderRadius: ConstValue().borderRadius,
+      boxShadow: [
+        BoxShadow(
+          color: Colors.grey.withOpacity(0.5),
+          spreadRadius: 5,
+          blurRadius: 7,
+          offset: const Offset(0,2), // changes position of shadow
+        ),
+      ],
     );
   }
 }
@@ -93,7 +101,7 @@ class ConstAppBar{
               );
             }
         ),
-        title: Text(title, style:GoogleFonts.roboto(fontSize:21,color: Colors.black,fontWeight: FontWeight.bold))
+        title: Text(title, style:GoogleFonts.pacifico(fontSize:30,color: Colors.black))
     );
   }
 }
