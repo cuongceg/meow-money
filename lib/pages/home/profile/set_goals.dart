@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:monney_management/const_value.dart';
 import 'package:choice/choice.dart';
+import 'package:monney_management/models/user.dart';
+import 'package:monney_management/services/database.dart';
+import 'package:provider/provider.dart';
 
 class Settings extends StatefulWidget {
   const Settings({super.key});
@@ -35,6 +38,7 @@ class _SettingsState extends State<Settings> {
   Widget build(BuildContext context) {
     double widthR=MediaQuery.of(context).size.width;
     double heightR=MediaQuery.of(context).size.height;
+    final user=Provider.of<MyUser?>(context);
     return Container(
       height: heightR/3,
       width: widthR,
@@ -187,7 +191,13 @@ class _SettingsState extends State<Settings> {
             ),
             child: TextButton(
                 onPressed:(){
+                  for(int i=0;i<valueChoose.length;i++){
+                    //Database(uid: user!.uid).updateGoals(_currentSliderValue.toStringAsFixed(3),valueChoose[i],typeChoose??"Every Month",monthChoose);
+                    Database(uid: user!.uid).setGoals("10.000",valueChoose[i]);
+                  }
                   Navigator.pop(context);
+                  print(_currentSliderValue.toStringAsFixed(3));
+                  print(monthChoose);
                 },
                 child:Text("Save",style:Font().bodyWhite,)
             ),
