@@ -4,7 +4,10 @@ import 'package:monney_management/models/money.dart';
 import 'package:monney_management/models/user.dart';
 import 'package:monney_management/const_value.dart';
 import 'package:monney_management/pages/home/bill_history_screen/bill_charts.dart';
+import 'package:monney_management/pages/home/bill_history_screen/search_bill.dart';
 import 'package:provider/provider.dart';
+
+import '../add_money/add_money.dart';
 
 class BillHistory extends StatefulWidget {
   const BillHistory({super.key});
@@ -85,12 +88,14 @@ class _BillHistoryState extends State<BillHistory> {
         }
       }
     }
-    cloExpenses/=expenses;
-    cosExpenses/=expenses;
-    foodExpenses/=expenses;
-    petExpenses/=expenses;
-    travelExpenses/=expenses;
-    vehExpenses/=expenses;
+    if(expenses!=0.0){
+      cloExpenses/=expenses;
+      cosExpenses/=expenses;
+      foodExpenses/=expenses;
+      petExpenses/=expenses;
+      travelExpenses/=expenses;
+      vehExpenses/=expenses;
+    }
     Map<String,double>map={
       "Clothes":cloExpenses,
       "Cosmetic":cosExpenses,
@@ -120,59 +125,11 @@ class _BillHistoryState extends State<BillHistory> {
                 centerTitle: true,
                 backgroundColor:Colors.orange.shade100,
                 actions: [
-                  MenuAnchor(
-                    builder: (BuildContext context,MenuController controller,Widget? child){
-                      return IconButton(
-                        onPressed: () {
-                          if (controller.isOpen) {
-                            controller.close();
-                          } else {
-                            controller.open();
-                          }
-                        },
-                        icon:Image.asset("assets/images/sleepover-party.png",height:40,width:40,),);
-                    },
-                      menuChildren: [
-                        MenuItemButton(
-                          child: Text("Select day",style:Font().bodyBlack,),
-                          onPressed:()async{
-                            await _selectDate(context);
-                          },),
-                        MenuItemButton(
-                          child:Text("Select month",style:Font().bodyBlack,),
-                          onPressed: (){
-                            showModalBottomSheet(
-                                context: context,
-                                builder:(BuildContext context){
-                                  return SizedBox(
-                                    height: heightR/2,
-                                    child: Column(
-                                      children: [
-                                        Expanded(
-                                          child: ListView.builder(
-                                            itemBuilder:(BuildContext context,int index){
-                                              return RadioListTile<int>(
-                                                  value: index,
-                                                  groupValue: groupValue,
-                                                  title: Text(months[index],style:Font().bodyBlack,),
-                                                  toggleable: true,
-                                                  onChanged: (int? value){
-                                                    setState(() {
-                                                      groupValue=value;
-                                                    });
-                                                  });
-                                            },
-                                            itemCount: 12,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  );
-                                }
-                            );
-                          },
-                        )
-                      ])
+                  IconButton(
+                      onPressed:(){
+                        Navigator.push(context,MaterialPageRoute(builder: (context)=>const SearchBill()));
+                      },
+                      icon:Image.asset("assets/images/sleepover-party.png",height:40,width:40,),)
                 ],
                 floating:false,
                 flexibleSpace:FlexibleSpaceBar(
@@ -233,25 +190,26 @@ class _BillHistoryState extends State<BillHistory> {
                     topRight:Radius.circular(40)
                 )
             ),
-            child:BillChart(first:percent[5]*100,second:percent[4]*100,third:percent[3]*100,fourth:(1-percent[5]-percent[4]-percent[3])*100
-            ,sfirst:options[5],ssecond: options[4],sthird: options[3]),
+            child:expenses!=0.0?BillChart(first:percent[5]*100,second:percent[4]*100,third:percent[3]*100,fourth:(1-percent[5]-percent[4]-percent[3])*100
+            ,sfirst:options[5],ssecond: options[4],sthird: options[3]):
+            SizedBox(
+              child: Padding(
+                padding: const EdgeInsets.only(top: 30),
+                child: Column(
+                  children: [
+                    Text('Go to add your first bill',style:Font().headingBlack,),
+                    IconButton(
+                        onPressed:(){
+                          Navigator.push(context,MaterialPageRoute(builder: (context)=>const Add()));
+                        },
+                        icon: Image.asset("assets/images/paw-print.png",height:50,width:50,))
+                  ],
+                ),
+              ),
+            ),
           ),
         ),
       ),
     );
-  }
-  Future<void> _selectDate(BuildContext context) async {
-    final now = DateTime.now();
-    final DateTime? picked = await showDatePicker(
-        context: context,
-        initialDate: date ?? now,
-        firstDate: now,
-        lastDate: DateTime(2101));
-    if (picked != null && picked != date) {
-      print('$picked');
-      setState(() {
-        date = picked;
-      });
-    }
   }
 }
