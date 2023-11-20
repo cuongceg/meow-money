@@ -16,6 +16,7 @@ class Login extends StatefulWidget{
 
 
 class _LoginState extends State<Login>{
+  bool hint=false;
   final AuthService authService=AuthService();
   final _formKey=GlobalKey<FormState>();
   final AuthService auth= AuthService();
@@ -27,12 +28,11 @@ class _LoginState extends State<Login>{
     double heightR=MediaQuery.of(context).size.height;
     double widthR=MediaQuery.of(context).size.width;
     return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: SystemUiOverlayStyle(
-        statusBarColor: Colors.purple.shade400,
-        systemNavigationBarDividerColor:Colors.purple[200]
+      value:SystemUiOverlayStyle(
+        statusBarColor: Colors.orange.shade50,
       ),
       child:Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.orange.shade50,
         body: Center(
             child:Form(
               key: _formKey,
@@ -44,34 +44,35 @@ class _LoginState extends State<Login>{
                       Positioned(
                           child:Container(
                             width: widthR,
-                            height: heightR/5,
-                            color: Colors.purple.shade400,
+                            height: heightR/4,
+                            color: Colors.orange.shade50
                           )),
                       WaveWidget(
                         config: CustomConfig(
                             gradients: [
-                              [Colors.purple.shade200,Colors.purple],
-                              [Colors.purple.shade200,Colors.purple],
-                              [Colors.white,Colors.purple.shade200],
+                              [Colors.orange.shade200,Colors.orange],
+                              [Colors.orange.shade400,Colors.orange],
+                              [Colors.orange.shade50,Colors.orange.shade200],
                             ],
                             durations: [5000,10000,6000],
                             heightPercentages:[0,0.35,0.7]
                         ),
-                        size: Size(widthR,heightR/5),
+                        size: Size(widthR,heightR/3),
                       ),
-                      Positioned(child: Text("Welcome back",style: Font().welcomeWhite,),),
+                      Positioned(child: Text("Meow Money",style: Font().welcomeBlack,),),
                       Positioned(
                           top: heightR/10,
                           left:widthR/3.1,
                           child:const CircleAvatar(
-                            backgroundImage: AssetImage('assets/images/logo_signin.png'),
+                            backgroundImage: AssetImage('assets/images/avatar.png'),
+                            backgroundColor: Colors.white,
                             radius: 60,
                           ))
                     ],
                   ),
                   Padding(
-                      padding: const EdgeInsets.only(top:30,left:135),
-                      child: Text('Log in',style: Font().welcomePurple,),
+                      padding: const EdgeInsets.only(top:0,left:135),
+                      child: Text('Log in',style: Font().welcomeBlack,),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top:30,left: 20,right: 20),
@@ -105,7 +106,8 @@ class _LoginState extends State<Login>{
                       onChanged:(text){
                         password=text;
                       },
-                      decoration: ConstWigdet().inputDecoration("Your password"),
+                      obscureText: hint,
+                      decoration: inputPasswordDecoration("Your password"),
                     ),
                   ),
                   Padding(
@@ -120,7 +122,7 @@ class _LoginState extends State<Login>{
                             print(result);
                             if(result == null){
                               final snackBar = SnackBar(
-                                backgroundColor:Colors.purple[100],
+                                backgroundColor:Colors.orange[100],
                                 content: Text('Invalid email or wrong password!',style: Font().bodyWhite,),
                               );
                               ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -131,8 +133,8 @@ class _LoginState extends State<Login>{
                           }
                           else{
                             final snackBar = SnackBar(
-                              backgroundColor:Colors.purple[100],
-                              content: Text('Invalid email or wrong password!',style: Font().bodyWhite,),
+                              backgroundColor:Colors.orange[100],
+                              content: Text('Invalid email or wrong password!',style: Font().bodyBlack,),
                             );
                             ScaffoldMessenger.of(context).showSnackBar(snackBar);
                           }
@@ -156,6 +158,29 @@ class _LoginState extends State<Login>{
               ),
             )
         ),
+      ),
+    );
+  }
+  InputDecoration? inputPasswordDecoration(String label){
+    return InputDecoration(
+      enabledBorder: OutlineInputBorder(
+          borderRadius:ConstValue().borderRadius,
+          borderSide:ConstValue().borderSideBlack
+      ),
+      focusedBorder: OutlineInputBorder(
+          borderRadius: ConstValue().borderRadius,
+          borderSide:ConstValue().borderSideOrange
+      ),
+      fillColor: Colors.white,
+      filled: true,
+      labelText:label,
+      suffix: InkWell(
+          child:hint?const Icon(Icons.remove_red_eye_outlined):const Icon(Icons.visibility_off_sharp),
+          onTap:()async{
+            setState(() {
+              hint=!hint;
+            });
+          }
       ),
     );
   }
