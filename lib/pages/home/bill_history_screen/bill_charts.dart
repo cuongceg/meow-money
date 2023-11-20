@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:monney_management/models/money.dart';
+import 'package:monney_management/models/user.dart';
 import 'charts.dart';
 import 'package:monney_management/const_value.dart';
 import 'package:provider/provider.dart';
@@ -56,6 +57,7 @@ class Expenses extends StatelessWidget{
   Widget build(BuildContext context){
     final double heightR=MediaQuery.of(context).size.height;
     DateFormat format=DateFormat('dd-MM-yyyy');
+    final user = Provider.of<MyUser>(context);
     final billClothesList=Provider.of<List<BillsClothes>?>(context);
     final billCosmeticList=Provider.of<List<BillsCosmetic>?>(context);
     final billFood=Provider.of<List<BillsFood>?>(context);
@@ -66,32 +68,56 @@ class Expenses extends StatelessWidget{
     switch(text){
       case "Clothes":
         if(billClothesList!=null){
-          product.addAll(billClothesList);
+          for(int i=0;i<billClothesList.length;i++){
+            if(billClothesList[i].uid==user.uid){
+              product.add(billClothesList[i]);
+            }
+          }
         }
         break;
       case "Cosmetic":
         if(billCosmeticList!=null){
-          product.addAll(billCosmeticList);
+          for(int i=0;i<billCosmeticList.length;i++){
+            if(billCosmeticList[i].uid==user.uid){
+              product.add(billCosmeticList[i]);
+            }
+          }
         }
         break;
       case "Food":
         if(billFood!=null){
-          product.addAll(billFood);
+          for(int i=0;i<billFood.length;i++){
+            if(billFood[i].uid==user.uid){
+              product.add(billFood[i]);
+            }
+          }
         }
         break;
       case "Pet":
         if(billPet!=null){
-          product.addAll(billPet);
+          for(int i=0;i<billPet.length;i++){
+            if(billPet[i].uid==user.uid){
+              product.add(billPet[i]);
+            }
+          }
         }
         break;
       case "Travel":
         if(billTravel!=null){
-          product.addAll(billTravel);
+          for(int i=0;i<billTravel.length;i++){
+            if(billTravel[i].uid==user.uid){
+              product.add(billTravel[i]);
+            }
+          }
         }
         break;
       case "Vehicles":
         if(billVehicles!=null){
-          product.addAll(billVehicles);
+          for(int i=0;i<billVehicles.length;i++){
+            if(billVehicles[i].uid==user.uid){
+              product.add(billVehicles[i]);
+            }
+          }
         }
         break;
       default:
