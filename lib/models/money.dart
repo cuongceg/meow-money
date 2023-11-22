@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 class Goals{
   String jan,feb,mar,apr,may,jun,jul,aug,sep,oct,nov,dec;
   Goals({
@@ -15,50 +17,25 @@ class Goals{
     required this.dec});
 }
 
-class BillsCosmetic{
+class Bills{
   String money,option;
   String? uid,idTouch;
   String? note;
   DateTime dateTime,nowDateTime;
-  BillsCosmetic({required this.money,required this.option,required this.dateTime,this.uid,this.idTouch,required this.nowDateTime,this.note});
+  Bills({required this.money,required this.option,required this.dateTime,this.uid,this.idTouch,required this.nowDateTime,this.note});
 }
 
-class BillsClothes{
+class Incomes{
   String money,option;
   String? uid,idTouch;
   String? note;
   DateTime dateTime,nowDateTime;
-  BillsClothes({required this.money,required this.option,required this.dateTime,this.uid,this.idTouch,required this.nowDateTime,this.note});
+  Incomes({required this.money,required this.option,required this.dateTime,this.uid,this.idTouch,required this.nowDateTime,this.note});
 }
 
-class BillsFood{
-  String money,option;
-  String? uid,idTouch;
-  String? note;
-  DateTime dateTime,nowDateTime;
-  BillsFood({required this.money,required this.option,required this.dateTime,this.uid,this.idTouch,required this.nowDateTime,this.note});
-}
-
-class BillsPet{
-  String money,option;
-  String? uid,idTouch;
-  String? note;
-  DateTime dateTime,nowDateTime;
-  BillsPet({required this.money,required this.option,required this.dateTime,this.uid,this.idTouch,required this.nowDateTime,this.note});
-}
-
-class BillsTravel{
-  String money,option;
-  String? uid,idTouch;
-  String? note;
-  DateTime dateTime,nowDateTime;
-  BillsTravel({required this.money,required this.option,required this.dateTime,this.uid,this.idTouch,required this.nowDateTime,this.note});
-}
-
-class BillsVehicles{
-  String money,option;
-  String? uid,idTouch;
-  String? note;
-  DateTime dateTime,nowDateTime;
-  BillsVehicles({required this.money,required this.option,required this.dateTime,this.uid,this.idTouch,required this.nowDateTime,this.note});
+class Saving{
+  Double money;
+  String? uid;
+  //bool completed;
+  Saving({required this.money,this.uid});
 }
