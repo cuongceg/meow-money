@@ -25,52 +25,12 @@ class _SearchBillState extends State<SearchBill> {
     final double heightR=MediaQuery.of(context).size.height;
     final double widthR=MediaQuery.of(context).size.width;
     final user = Provider.of<MyUser>(context);
-    final billClothesList=Provider.of<List<BillsClothes>?>(context);
-    final billCosmeticList=Provider.of<List<BillsCosmetic>?>(context);
-    final billFood=Provider.of<List<BillsFood>?>(context);
-    final billPet=Provider.of<List<BillsPet>?>(context);
-    final billTravel=Provider.of<List<BillsTravel>?>(context);
-    final billVehicles=Provider.of<List<BillsVehicles>?>(context);
+    final billList=Provider.of<List<Bills>?>(context);
     List product=[];
-    if(billClothesList!=null){
-      for(int i=0;i<billClothesList.length;i++){
-        if(billClothesList[i].uid==user.uid){
-          product.add(billClothesList[i]);
-        }
-      }
-    }
-    if(billCosmeticList!=null){
-      for(int i=0;i<billCosmeticList.length;i++){
-        if(billCosmeticList[i].uid==user.uid){
-          product.add(billCosmeticList[i]);
-        }
-      }
-    }
-    if(billFood!=null){
-      for(int i=0;i<billFood.length;i++){
-        if(billFood[i].uid==user.uid){
-          product.add(billFood[i]);
-        }
-      }
-    }
-    if(billPet!=null){
-      for(int i=0;i<billPet.length;i++){
-        if(billPet[i].uid==user.uid){
-          product.add(billPet[i]);
-        }
-      }
-    }
-    if(billTravel!=null){
-      for(int i=0;i<billTravel.length;i++){
-        if(billTravel[i].uid==user.uid){
-          product.add(billTravel[i]);
-        }
-      }
-    }
-    if(billVehicles!=null){
-      for(int i=0;i<billVehicles.length;i++){
-        if(billVehicles[i].uid==user.uid){
-          product.add(billVehicles[i]);
+    if(billList!=null){
+      for(int i=0;i<billList.length;i++){
+        if(billList[i].uid==user.uid){
+          product.add(billList[i]);
         }
       }
     }
@@ -219,7 +179,7 @@ class _SearchBillState extends State<SearchBill> {
                                                   children: [
                                                     IconButton(
                                                       onPressed:(){
-                                                        Navigator.push(context,MaterialPageRoute(builder: (context)=>UpdateBill(idTouch: search[index].idTouch??"US6sYmwwE57DxJuG2ZOA", option: search[index].option??"Details")));
+                                                        Navigator.push(context,MaterialPageRoute(builder: (context)=>UpdateBill(idTouch: search[index].idTouch??"US6sYmwwE57DxJuG2ZOA",money:search[index].money,dateTime:format.format(search[index].dateTime),note:search[index].note,)));
                                                       },
                                                       icon:Image.asset("assets/images/pencil.png",width:35,height:35,),),
                                                     IconButton(
@@ -227,7 +187,7 @@ class _SearchBillState extends State<SearchBill> {
                                                       icon:Image.asset("assets/images/vip.png",width:40,height:40,),),
                                                     IconButton(
                                                       onPressed:(){
-                                                        Database().deleteDocument(search[index].idTouch??"US6sYmwwE57DxJuG2ZOA",search[index].option??"Details");
+                                                        Database().deleteDocument(search[index].idTouch??"US6sYmwwE57DxJuG2ZOA");
                                                         Navigator.pop(context);
                                                       },
                                                       icon:Image.asset("assets/images/delete.png",width:50,height:50,),),
