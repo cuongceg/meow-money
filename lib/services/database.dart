@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 import 'package:monney_management/models/user.dart';
@@ -9,7 +11,8 @@ class Database{
   final CollectionReference userCollection= FirebaseFirestore.instance.collection('user');
   final CollectionReference userGoalsMoneyCollection= FirebaseFirestore.instance.collection('money');
   final CollectionReference testBillCollection=FirebaseFirestore.instance.collection("bill");
-  FirebaseFirestore firestore = FirebaseFirestore.instance;
+  final CollectionReference incomesCollection=FirebaseFirestore.instance.collection("incomes");
+  final CollectionReference savingCollection=FirebaseFirestore.instance.collection("save");
   final formatMonth=DateFormat('MM-yyyy');
   final format=DateFormat('hh-mm-ss-dd-MM-yyyy');
 
@@ -115,9 +118,6 @@ class Database{
       }
     }).toList();
   }
-  Stream<List<Goals>> get goalsCosmeticData{
-    return firestore.collection("money/izbFkTMPYiSeWrHlatRdwzXblf42/Cosmetic").snapshots().map(_moneyDataFromSnapshot);
-  }
   Stream<List<Goals>> get goalsClothesData{
     return userGoalsMoneyCollection.doc(uid).collection("Clothes").snapshots().map(_moneyDataFromSnapshot);
   }
@@ -136,49 +136,25 @@ class Database{
 
   //bill user
   Future addTestBillData(String money,String? note,String options,DateTime dateTime,DateTime nowDateTime,String? userid) async{
-    return await testBillCollection.doc(options).collection(formatMonth.format(dateTime)).add({
+    return await testBillCollection.add({
       "money":money,
       "note":note,
       "date":Timestamp.fromDate(dateTime),
       "option":options,
       "nowDate":Timestamp.fromDate(nowDateTime),
       "uid":userid,
-      "idTouch":format.format(nowDateTime),
+      "idTouch":'${format.format(nowDateTime)}-$options',
     });
   }
 
-  void updateDocument(String searchValue,String option,String money,String? note,DateTime dateTime) async {
-    String collectPath='';
-    switch(option){
-      case "Clothes":
-        collectPath="bill/Clothes/11-2023";
-        break;
-      case "Cosmetic":
-        collectPath="bill/Cosmetic/11-2023";
-        break;
-      case "Food":
-        collectPath="bill/Food/11-2023";
-        break;
-      case "Pet":
-        collectPath="bill/Pet/11-2023";
-        break;
-      case "Travel":
-        collectPath="bill/Travel/11-2023";
-        break;
-      case "Vehicles":
-        collectPath="bill/Vehicles/11-2023";
-        break;
-      default:
-        collectPath='bill/Cosmetic/11-2023';
-    }
+  void updateDocument(String searchValue,String money,String? note,DateTime dateTime) async {
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-        .collection(collectPath)
+        .collection('bill')
         .where("idTouch", isEqualTo: searchValue)
         .get();
     for (QueryDocumentSnapshot document in querySnapshot.docs) {
       // Lấy ID của document
       String documentId = document.id;
-
       // Lấy dữ liệu từ document
       Map<String, dynamic> data = document.data() as Map<String, dynamic>;
 
@@ -189,116 +165,28 @@ class Database{
 
       // Cập nhật document với dữ liệu mới
       await FirebaseFirestore.instance
-          .collection(collectPath)
+          .collection('bill')
           .doc(documentId)
           .update(data);
     }
   }
-  void deleteDocument(String searchValue,String option) async {
-    String collectPath='';
-    switch(option){
-      case "Clothes":
-        collectPath="bill/Clothes/11-2023";
-        break;
-      case "Cosmetic":
-        collectPath="bill/Cosmetic/11-2023";
-        break;
-      case "Food":
-        collectPath="bill/Food/11-2023";
-        break;
-      case "Pet":
-        collectPath="bill/Pet/11-2023";
-        break;
-      case "Travel":
-        collectPath="bill/Travel/11-2023";
-        break;
-      case "Vehicles":
-        collectPath="bill/Vehicles/11-2023";
-        break;
-      default:
-        collectPath='bill/Cosmetic/11-2023';
-    }
+  void deleteDocument(String searchValue) async {
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-        .collection(collectPath)
-        .where("idTouch", isEqualTo: searchValue)
+        .collection("bill")
+        .where("idTouch", isEqualTo:searchValue)
         .get();
     for (QueryDocumentSnapshot document in querySnapshot.docs) {
       String documentId = document.id;
       await FirebaseFirestore.instance
-          .collection(collectPath)
+          .collection("bill")
           .doc(documentId)
           .delete();
     }
   }
 
-  List<BillsClothes>_billsClothesDataFromSnapshot(QuerySnapshot snapshot){
+  List<Bills>_billsDataFromSnapshot(QuerySnapshot snapshot){
     return snapshot.docs.map((doc) {
-      return BillsClothes(
-        money: doc.data().toString().contains('money') ? doc.get('money') : "0",
-        option: doc.data().toString().contains('option') ? doc.get('option') : "0",
-        note: doc.data().toString().contains('note') ? doc.get('note') : "0",
-        dateTime:doc.data().toString().contains('date')?doc.get('date').toDate():DateTime.now(),
-        nowDateTime:doc.data().toString().contains('nowDate')?doc.get('nowDate').toDate():DateTime.now(),
-        uid:doc.data().toString().contains('uid')?doc.get('uid'):'0',
-        idTouch:doc.data().toString().contains('idTouch')?doc.get('idTouch'):'0',
-      );
-    }).toList();
-  }
-  List<BillsCosmetic>_billsCosmeticDataFromSnapshot(QuerySnapshot snapshot){
-    return snapshot.docs.map((doc) {
-      return BillsCosmetic(
-        money: doc.data().toString().contains('money') ? doc.get('money') : "0",
-        option: doc.data().toString().contains('option') ? doc.get('option') : "0",
-        note: doc.data().toString().contains('note') ? doc.get('note') : "0",
-        dateTime:doc.data().toString().contains('date')?doc.get('date').toDate():DateTime.now(),
-        nowDateTime:doc.data().toString().contains('nowDate')?doc.get('nowDate').toDate():DateTime.now(),
-        uid:doc.data().toString().contains('uid')?doc.get('uid'):'0',
-        idTouch:doc.data().toString().contains('idTouch')?doc.get('idTouch'):'0',
-      );
-    }).toList();
-  }
-  List<BillsFood>_billsFoodDataFromSnapshot(QuerySnapshot snapshot){
-    return snapshot.docs.map((doc) {
-      return BillsFood(
-        money: doc.data().toString().contains('money') ? doc.get('money') : "0",
-        option: doc.data().toString().contains('option') ? doc.get('option') : "0",
-        note: doc.data().toString().contains('note') ? doc.get('note') : "0",
-        dateTime:doc.data().toString().contains('date')?doc.get('date').toDate():DateTime.now(),
-        nowDateTime:doc.data().toString().contains('nowDate')?doc.get('nowDate').toDate():DateTime.now(),
-        uid:doc.data().toString().contains('uid')?doc.get('uid'):'0',
-        idTouch:doc.data().toString().contains('idTouch')?doc.get('idTouch'):'0',
-      );
-    }).toList();
-  }
-  List<BillsPet>_billsPetDataFromSnapshot(QuerySnapshot snapshot){
-    return snapshot.docs.map((doc) {
-      return BillsPet(
-        money: doc.data().toString().contains('money') ? doc.get('money') : "0",
-        option: doc.data().toString().contains('option') ? doc.get('option') : "0",
-        note: doc.data().toString().contains('note') ? doc.get('note') : "0",
-        dateTime:doc.data().toString().contains('date')?doc.get('date').toDate():DateTime.now(),
-        nowDateTime:doc.data().toString().contains('nowDate')?doc.get('nowDate').toDate():DateTime.now(),
-        uid:doc.data().toString().contains('uid')?doc.get('uid'):'0',
-        idTouch:doc.data().toString().contains('idTouch')?doc.get('idTouch'):'0',
-      );
-    }).toList();
-  }
-  List<BillsTravel>_billsTravelDataFromSnapshot(QuerySnapshot snapshot){
-    return snapshot.docs.map((doc) {
-      return BillsTravel(
-        money: doc.data().toString().contains('money') ? doc.get('money') : "0",
-        option: doc.data().toString().contains('option') ? doc.get('option') : "0",
-        note: doc.data().toString().contains('note') ? doc.get('note') : "0",
-        dateTime:doc.data().toString().contains('date')?doc.get('date').toDate():DateTime.now(),
-        nowDateTime:doc.data().toString().contains('nowDate')?doc.get('nowDate').toDate():DateTime.now(),
-        uid:doc.data().toString().contains('uid')?doc.get('uid'):'0',
-        idTouch:doc.data().toString().contains('idTouch')?doc.get('idTouch'):'0',
-      );
-    }).toList();
-  }
-  List<BillsVehicles>_billsVehiclesDataFromSnapshot(QuerySnapshot snapshot){
-    return snapshot.docs.map((doc) {
-      return BillsVehicles(
+      return Bills(
         money: doc.data().toString().contains('money') ? doc.get('money') : "0",
         option: doc.data().toString().contains('option') ? doc.get('option') : "0",
         note: doc.data().toString().contains('note') ? doc.get('note') : "0",
@@ -310,22 +198,56 @@ class Database{
     }).toList();
   }
 
-  Stream<List<BillsClothes>> get clothesBillsData {
-    return firestore.collection('bill/Clothes/${formatMonth.format(DateTime.now())}').snapshots().map((_billsClothesDataFromSnapshot));
+  Stream<List<Bills>> get billsData {
+    return testBillCollection.snapshots().map((_billsDataFromSnapshot));
   }
-  Stream<List<BillsCosmetic>> get cosmeticBillsData {
-    return firestore.collection('bill/Cosmetic/${formatMonth.format(DateTime.now())}').snapshots().map((_billsCosmeticDataFromSnapshot));
+
+  //incomes
+  Future addIncomesData(String money,String? note,String options,DateTime dateTime,DateTime nowDateTime,String? userid) async{
+    return await incomesCollection.add({
+      "money":money,
+      "note":note,
+      "date":Timestamp.fromDate(dateTime),
+      "option":options,
+      "nowDate":Timestamp.fromDate(nowDateTime),
+      "uid":userid,
+      "idTouch":'${format.format(nowDateTime)}-$options',
+    });
   }
-  Stream<List<BillsFood>> get foodBillsData {
-    return firestore.collection('bill/Food/${formatMonth.format(DateTime.now())}').snapshots().map((_billsFoodDataFromSnapshot));
+  List<Incomes>_incomesDataFromSnapshot(QuerySnapshot snapshot){
+    return snapshot.docs.map((doc) {
+      return Incomes(
+        money: doc.data().toString().contains('money') ? doc.get('money') : "0",
+        option: doc.data().toString().contains('option') ? doc.get('option') : "0",
+        note: doc.data().toString().contains('note') ? doc.get('note') : "0",
+        dateTime:doc.data().toString().contains('date')?doc.get('date').toDate():DateTime.now(),
+        nowDateTime:doc.data().toString().contains('nowDate')?doc.get('nowDate').toDate():DateTime.now(),
+        uid:doc.data().toString().contains('uid')?doc.get('uid'):'0',
+        idTouch:doc.data().toString().contains('idTouch')?doc.get('idTouch'):'0',
+      );
+    }).toList();
   }
-  Stream<List<BillsPet>> get petBillsData {
-    return firestore.collection('bill/Pet/${formatMonth.format(DateTime.now())}').snapshots().map((_billsPetDataFromSnapshot));
+  Stream<List<Incomes>> get incomesData {
+    return incomesCollection.snapshots().map((_incomesDataFromSnapshot));
   }
-  Stream<List<BillsTravel>> get travelBillsData {
-    return firestore.collection('bill/Travel/${formatMonth.format(DateTime.now())}').snapshots().map((_billsTravelDataFromSnapshot));
+  //saving
+  Future addSavingData(Double money,bool completed) async{
+    return await savingCollection.doc(uid).set({
+      "money":money,
+      "completed":completed,
+      "uid":uid
+    });
   }
-  Stream<List<BillsVehicles>> get vehiclesBillsData {
-    return firestore.collection('bill/Vehicles/${formatMonth.format(DateTime.now())}').snapshots().map((_billsVehiclesDataFromSnapshot));
+  List<Saving>_savingDataFromSnapshot(QuerySnapshot snapshot){
+    return snapshot.docs.map((doc){
+      return Saving(
+          money: doc.data().toString().contains('money')?doc.get('money'):0.0,
+          // completed: doc.data().toString().contains('money')?doc.get('completed').toBoolean():false,
+          uid: doc.data().toString().contains('uid')?doc.get('uid'):" ",
+      );
+    }).toList();
+  }
+  Stream<List<Saving>> get savingData {
+    return incomesCollection.snapshots().map((_savingDataFromSnapshot));
   }
 }
