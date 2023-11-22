@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:monney_management/const_value.dart';
-//import 'package:monney_management/services/database.dart';
 import 'package:monney_management/models/user.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/foundation.dart';
@@ -29,22 +28,38 @@ class _AddState extends State<Add> {
       valueChoose=value;
     });
   }
-
+  List<String>choices=["Cosmetic",'Clothes','Food','Pet','Travel',"Vehicles"];
+  List<String>imageChoose=[
+    'assets/images/cosmetic.png',
+    'assets/images/clothes-hanger.png',
+    'assets/images/burger.png',
+    'assets/images/pets.png',
+    'assets/images/travel.png',
+    'assets/images/car.png'
+  ];
+  List<String>incomesChoices=['Salary',"Extra Money","Give","Other"];
+  List<String>imagesIncomesChoice=[
+    'assets/images/salary.png',
+    'assets/images/income.png',
+    'assets/images/give-money.png',
+    'assets/images/more.png',
+  ];
+  List<String>add=["Incomes","Expenses"];
+  List<String> incomesChoose=[];
+  void setSelectedIncomesChoice(List<String> value){
+    setState(() {
+      incomesChoose=value;
+    });
+  }
+  String? addChoice;
+  bool incomes=false;
+  Set<bool>selection=<bool>{true,false};
   @override
   Widget build(BuildContext context) {
     final user=Provider.of<MyUser?>(context);
     final formKey=GlobalKey<FormState>();
     final double widthR=MediaQuery.of(context).size.width;
     final double heightR=MediaQuery.of(context).size.height;
-    List<String>choices=["Cosmetic",'Clothes','Food','Pet','Travel',"Vehicles"];
-    List<String>imageChoose=[
-      'assets/images/cosmetic.png',
-      'assets/images/clothes-hanger.png',
-      'assets/images/burger.png',
-      'assets/images/pets.png',
-      'assets/images/travel.png',
-      'assets/images/car.png'
-    ];
     return Scaffold(
       backgroundColor: Colors.orange.shade100,
       body:Form(
@@ -115,6 +130,57 @@ class _AddState extends State<Add> {
                       ),
                     ),
                     Padding(
+                      padding: const EdgeInsets.only(top: 30),
+                      child: Container(
+                        height: 60,
+                        width: widthR*0.9,
+                        decoration:BoxDecoration(
+                            color:Colors.white,
+                            borderRadius:BorderRadius.circular(40),
+                            border:Border.all(width:1.5,color:Colors.black)
+                        ),
+                        child: Row(
+                          children: [
+                            Text('  Select type: ',style:Font().bodyBlack,),
+                            Container(
+                              width: 100,
+                              height:40,
+                              decoration:BoxDecoration(
+                                  borderRadius: BorderRadius.circular(40),
+                                  border: Border.all(color:Colors.black,width: 2.0),
+                                  color: incomes?Colors.orange:Colors.lightGreen
+                              ),
+                              child: TextButton(
+                                child:Text("Incomes",style:Font().bodyBlack,),
+                                onPressed: (){
+                                  setState(() {
+                                    incomes=true;
+                                  });
+                                },
+                              ),
+                            ),
+                            Container(
+                              height:40,
+                              width: 110,
+                              decoration:BoxDecoration(
+                                borderRadius: BorderRadius.circular(40),
+                                border: Border.all(color:Colors.black,width: 2.0),
+                                color: incomes?Colors.lightGreen:Colors.orange
+                              ),
+                              child: TextButton(
+                                child:Text("Expenses",style:Font().bodyBlack,),
+                                onPressed: (){
+                                  setState(() {
+                                    incomes=false;
+                                  });
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Padding(
                       padding: const EdgeInsets.only(top:30),
                       child: TextFormField(
                         validator: (val) {
@@ -148,8 +214,11 @@ class _AddState extends State<Add> {
                                     type: QuickAlertType.custom,
                                     customAsset:"assets/images/add_money.gif",
                                     confirmBtnColor: Colors.brown,
-                                    widget: Column(
+                                    widget:!incomes?Column(
                                       children: [
+                                        Center(
+                                          child:Text("Select your option:",style:Font().bodyBlack,),
+                                        ),
                                         Padding(
                                           padding: const EdgeInsets.only(top:5),
                                           child:Choice<String>.inline(
@@ -200,10 +269,65 @@ class _AddState extends State<Add> {
                                           ),
                                         )
                                       ],
+                                    ):Column(
+                                      children: [
+                                        Center(
+                                          child:Text("Select your option:",style:Font().bodyBlack,),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.only(top:5),
+                                          child:Choice<String>.inline(
+                                            itemCount: incomesChoices.length,
+                                            itemBuilder:(state1,i){
+                                              return ChoiceChip(
+                                                backgroundColor:Colors.red.shade200,
+                                                selectedColor: Colors.orange.shade200,
+                                                selected:state1.selected(incomesChoices[i]),
+                                                onSelected:state1.onSelected(incomesChoices[i]),
+                                                label:SizedBox(
+                                                  height:40,
+                                                  width:160,
+                                                  child:Row(
+                                                    mainAxisAlignment:MainAxisAlignment.center,
+                                                    children: [
+                                                      Image.asset(imagesIncomesChoice[i],width:50,height: 40,),
+                                                      Text(incomesChoices[i],style:Font().bodyBlack,)
+                                                    ],
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                            multiple: true,
+                                            clearable: true,
+                                            value: incomesChoose,
+                                            onChanged: setSelectedIncomesChoice,
+                                            listBuilder: ChoiceList.createScrollable(
+                                              spacing: 10,
+                                              runSpacing: 10,
+                                              padding:  const EdgeInsets.symmetric(
+                                                horizontal:10,
+                                                vertical: 10,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.only(top:40),
+                                          child: TextFormField(
+                                            controller: noteController,
+                                            onChanged: (text){
+                                              setState(() {
+                                                note=text;
+                                              });
+                                            },
+                                            decoration: ConstWigdet().inputDecoration("Your note"),
+                                          ),
+                                        )
+                                      ],
                                     )
                                 );
                               },
-                              child:Text("More details",style:Font().headingBlack)),
+                              child:Text("Tap for more details",style:Font().headingBlack)),
                         ],
                       ),
                     ),
@@ -216,15 +340,38 @@ class _AddState extends State<Add> {
                       ),
                       child: TextButton(
                           onPressed:(){
-                            for(int i=0;i<valueChoose.length;i++){
-                              Database(uid: user!.uid).addTestBillData(_currentValue.toString(), note, valueChoose[i],date??DateTime.now(),DateTime.now(),user.uid);
+                            if(valueChoose.isNotEmpty||incomesChoose.isNotEmpty){
+                              if(incomes==false){
+                                for(int i=0;i<valueChoose.length;i++){
+                                  Database(uid: user!.uid).addTestBillData(_currentValue.toStringAsFixed(0), note, valueChoose[i],date??DateTime.now(),DateTime.now(),user.uid);
+                                }
+                                valueChoose.removeRange(0,valueChoose.length);
+                              }
+                              else{
+                                for(int i=0;i<incomesChoose.length;i++){
+                                  Database(uid: user!.uid).addIncomesData(_currentValue.toStringAsFixed(0), note, incomesChoose[i],date??DateTime.now(),DateTime.now(),user.uid);
+                                }
+                                incomesChoose.removeRange(0,incomesChoose.length);
+                              }
+                              noteController.clear();
+                              setState(() {
+                                _currentValue=0;
+                                addChoice=null;
+                              });
+                              dateEditingController.clear();
+                              final snackBar = SnackBar(
+                                backgroundColor:Colors.orange[100],
+                                content: Text('Successfully',style: Font().bodyBlack,),
+                              );
+                              ScaffoldMessenger.of(context).showSnackBar(snackBar);
                             }
-                            valueChoose.removeRange(0,valueChoose.length);
-                            noteController.clear();
-                            setState(() {
-                              _currentValue=0;
-                            });
-                            dateEditingController.clear();
+                            else{
+                              final snackBar = SnackBar(
+                                backgroundColor:Colors.orange[100],
+                                content: Text('Please choose your options in more details',style: Font().bodyBlack,),
+                              );
+                              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                            }
                           },
                           child:Text("Save",style:Font().bodyWhite,)),
                     ),
