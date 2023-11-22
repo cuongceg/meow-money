@@ -1,12 +1,12 @@
 # meow-money
 
-A finance app by AiThings Lab.
+A finance management app by AiThings Lab.
 
 ## In this document:
 
 1. [How to run this project?](#how-to-run-this-project)
 2. [Folder structure](#folder-structure)
-3. [Bugs and fix](#Bugs-and-fix)
+3. [Dependecies](Dependencies)
 
 ## How to run this project?
 
@@ -15,7 +15,7 @@ A finance app by AiThings Lab.
 1. Clone this repository:
 
 ```
-git clone https://github.com/LeDinhThuc157/Monney_Managerment.git
+git clone https://github.com/cuongceg/meow-money.git
 ```
 
 2. Install all dependencies (libraries):
@@ -54,11 +54,11 @@ Running the app on mobile devices is recommended.
 ├── assets/ - Contains static files (images, videos, audios)
 ├── ios/ - Contains build artifacts for iOS
 ├── lib/ - Contains source code
-    ├── function/ -Contains functions 
     ├── models/ - Contains classes of real-world objects
     ├── pages/ - Contains widgets represented as pages or screens
+        ├──home/ - Contains home screens
+        ├──login/ -Contains login and sign up screens
     ├── services/ - Contains classes controll models
-    ├── widgets/ - Contains small widgets (components) for pages
     ├── const_value.dart - Contains const value and methods
     ├── firebase_options.dart - Contains current platform for Firebase
     ├── main.dart - Entry point (code starts here)
@@ -71,7 +71,6 @@ Running the app on mobile devices is recommended.
 ├── README.md - This documents
 ```
 
-## Bugs and fix
+## Dependencies
 
-1. Multidex support([https://stackoverflow.com/questions/71443293/app-requires-multidex-support-in-flutter](https://stackoverflow.com/questions/71443293/app-requires-multidex-support-in-flutter))
-2. Android version by Firebase.
+
