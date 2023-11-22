@@ -29,13 +29,9 @@ class MyApp extends StatelessWidget {
       providers: [
         StreamProvider<MyUser?>.value(value: AuthService().user, initialData:null),
         StreamProvider<List<UserInformation>?>.value(value:Database().authData, initialData: null),
-        StreamProvider<List<BillsCosmetic>?>.value(value: Database().cosmeticBillsData, initialData:null),
-        StreamProvider<List<BillsClothes>?>.value(value: Database().clothesBillsData, initialData:null),
-        StreamProvider<List<BillsFood>?>.value(value: Database().foodBillsData, initialData:null),
-        StreamProvider<List<BillsPet>?>.value(value: Database().petBillsData, initialData:null),
-        StreamProvider<List<BillsTravel>?>.value(value: Database().travelBillsData, initialData:null),
-        StreamProvider<List<BillsVehicles>?>.value(value: Database().vehiclesBillsData, initialData:null),
-        StreamProvider<List<Goals>?>.value(value: Database(uid:"izbFkTMPYiSeWrHlatRdwzXblf42").goalsCosmeticData, initialData:null),
+        StreamProvider<List<Bills>?>.value(value: Database().billsData, initialData:null),
+        StreamProvider<List<Incomes>?>.value(value: Database().incomesData, initialData:null),
+        StreamProvider<List<Saving>?>.value(value: Database().savingData, initialData:null),
       ],
       child:const MaterialApp(
           debugShowCheckedModeBanner: false,
