@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:monney_management/const_value.dart';
 import 'package:monney_management/models/user.dart';
 import 'package:monney_management/pages/home/profile/edit_profile.dart';
+import 'package:monney_management/models/money.dart';
+import 'package:monney_management/pages/home/profile/set_saving.dart';
 import 'package:monney_management/services/auth_service.dart';
-import 'package:quickalert/quickalert.dart';
 import 'set_goals.dart';
 import 'items.dart';
 import 'dart:io';
 import 'package:provider/provider.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:percent_indicator/circular_percent_indicator.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -19,8 +19,6 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  double _currentSliderValue=20;
-  bool hidden=false;
   List<Widget>items=[
     Items(title:"Food", goals:10000,color:Colors.red.shade400,),
     Items(title:"Clothes", goals:10000,color:Colors.yellow.shade400),
@@ -29,8 +27,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
   ];
   @override
   Widget build(BuildContext context) {
+    double incomes=0,expenses=0;
     final authList=Provider.of<List<UserInformation>?>(context);
     final user=Provider.of<MyUser?>(context);
+    final billList=Provider.of<List<Bills>?>(context);
+    final incomesList=Provider.of<List<Incomes>?>(context);
+    if(incomesList!=null){
+      for(int i=0;i<incomesList.length;i++){
+        if(incomesList[i].uid==user!.uid){
+          incomes+=double.parse(incomesList[i].money);
+        }
+      }
+    }
+    if(billList!=null){
+      for(int i=0;i<billList.length;i++){
+        if(billList[i].uid==user!.uid){
+          expenses+=double.parse(billList[i].money);
+        }
+      }
+    }
+    expenses/=1000;
+    incomes/=1000;
     int index=0;
     for(int i=0;i<authList!.length;i++){
       if(authList[i].uid==user!.uid){
@@ -38,7 +55,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
       }
     }
     double heightR=MediaQuery.of(context).size.height;
-    //double widthR=MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: Colors.orange.shade100,
       body:Column(
@@ -106,47 +122,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
               leading:Image.asset('assets/images/piggy-bank.png',height:30,width: 30,),
               title:Text("Your savings",style:Font().headingBlack,),
               onTap:(){
-                QuickAlert.show(
+                showModalBottomSheet(
                     context: context,
-                    type: QuickAlertType.custom,
-                    customAsset:"assets/images/cat_saving.gif",
-                    onConfirmBtnTap:(){
-                      if(!hidden){
-                        setState(() {
-                          hidden=true;
-                        });
-                      }
-                      Navigator.pop(context);
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadiusDirectional.circular(40)
+                    ),
+                    builder: (BuildContext context){
+                      return SetSaving(
+                        incomes:incomes,
+                        expenses: expenses,
+                      );
                     },
-                    confirmBtnText:hidden?"Ok":"Save",
-                    confirmBtnTextStyle: Font().bodyWhite,
-                    confirmBtnColor: Colors.brown,
-                    title:hidden?"Finish 34.000/${_currentSliderValue.toStringAsFixed(3)}":"Set your saving money",
-                    titleColor: Colors.black,
-                    text:hidden?"":"Once you press save you can't change it until it's done",
-                    widget:Column(
-                      children: [
-                        hidden?CircularPercentIndicator(
-                          radius: 100,
-                          percent:0.8,
-                          progressColor: Colors.lightGreen,
-                          backgroundColor: Colors.orange.shade100,
-                        ):Slider(
-                            value: _currentSliderValue,
-                            max: 55,
-                            min:5,
-                            divisions:10,
-                            activeColor:Colors.red.shade200,
-                            inactiveColor:Colors.lightGreen,
-                            label: "${_currentSliderValue.round().toStringAsFixed(3)}.000",
-                            onChanged:(double value){
-                              setState(() {
-                                _currentSliderValue=value;
-                              });
-                            }),
-                      ],
-                    )
-                );
+                    );
               },
             ),
           ),
