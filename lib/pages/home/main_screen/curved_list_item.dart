@@ -81,7 +81,7 @@ class CurvedListItem extends StatelessWidget {
                         children: [
                           IconButton(
                               onPressed:(){
-                                Navigator.push(context,MaterialPageRoute(builder: (context)=>UpdateBill(idTouch: idTouch??"US6sYmwwE57DxJuG2ZOA", option: option??"Details")));
+                                Navigator.push(context,MaterialPageRoute(builder: (context)=>UpdateBill(idTouch: idTouch??"US6sYmwwE57DxJuG2ZOA",money:money??"",dateTime:time??"",note:note,)));
                               },
                               icon:Image.asset("assets/images/pencil.png",width:35,height:35,),),
                           IconButton(
@@ -89,7 +89,7 @@ class CurvedListItem extends StatelessWidget {
                             icon:Image.asset("assets/images/vip.png",width:40,height:40,),),
                           IconButton(
                             onPressed:(){
-                              Database().deleteDocument(idTouch??"US6sYmwwE57DxJuG2ZOA", option??"Details");
+                              Database().deleteDocument(idTouch??"US6sYmwwE57DxJuG2ZOA");
                               Navigator.pop(context);
                             },
                             icon:Image.asset("assets/images/delete.png",width:50,height:50,),),
