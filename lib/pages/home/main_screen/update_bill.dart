@@ -6,8 +6,9 @@ import 'package:flutter_simple_calculator/flutter_simple_calculator.dart';
 import 'package:monney_management/services/database.dart';
 
 class UpdateBill extends StatefulWidget {
-  const UpdateBill({super.key,required this.idTouch,required this.option});
-  final String idTouch,option;
+  const UpdateBill({super.key,required this.idTouch,required this.dateTime,required this.money,this.note});
+  final String idTouch,money,dateTime;
+  final String? note;
   @override
   State<UpdateBill> createState() => _UpdateBillState();
 }
@@ -74,7 +75,7 @@ class _UpdateBillState extends State<UpdateBill> {
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               TextButton(
-                                child: Text(_currentValue==0?"Enter money (.000)":_currentValue.toString(),style:Font().bodyBlack,),
+                                child: Text(_currentValue==0?"${widget.money}.000":_currentValue.toString(),style:Font().bodyBlack,),
                                 onPressed: (){
                                   showModalBottomSheet(
                                       context: context,
@@ -110,7 +111,7 @@ class _UpdateBillState extends State<UpdateBill> {
                             await _selectDate(context);
                             dateEditingController.text = DateFormat('dd/MM/yyyy').format(date!);
                           },
-                          decoration: ConstWigdet().inputDecoration("Enter date"),
+                          decoration: ConstWigdet().inputDecoration(widget.dateTime),
                         ),
                       ),
                       Padding(
@@ -127,7 +128,7 @@ class _UpdateBillState extends State<UpdateBill> {
                           onChanged: (text){
                             note=text;
                           },
-                          decoration: ConstWigdet().inputDecoration("Update your note"),
+                          decoration: ConstWigdet().inputDecoration(note??"Update your note"),
                         ),
                       ),
                       Container(
@@ -139,7 +140,7 @@ class _UpdateBillState extends State<UpdateBill> {
                         ),
                         child: TextButton(
                             onPressed:(){
-                              Database().updateDocument(widget.idTouch, widget.option,_currentValue.toString(),note,date??DateTime.now());
+                              Database().updateDocument(widget.idTouch,_currentValue.toString(),note,date??DateTime.now());
                               Navigator.pop(context);
                               setState(() {
                                 _currentValue=0;
