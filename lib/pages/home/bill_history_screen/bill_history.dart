@@ -82,6 +82,7 @@ class _BillHistoryState extends State<BillHistory> {
     List options=map.keys.toList();
     List percent=map.values.toList();
     expenses/=1000;
+    //incomes
     if(incomesList!=null){
       for(int i=0;i<incomesList.length;i++){
         if(incomesList[i].uid==user.uid){
