@@ -21,6 +21,7 @@ class _RecordState extends State<Record> {
   TextStyle fontBold=GoogleFonts.roboto(fontSize: 18,color: Colors.black,fontWeight: FontWeight.bold);
   TextStyle fontBigBold=GoogleFonts.roboto(fontSize: 20,color: Colors.black,fontWeight: FontWeight.bold);
   DateFormat formatMonth=DateFormat.MMMM('en_US');
+  DateFormat formatMonthYear=DateFormat('MM/yyyy');
   DateFormat format=DateFormat('dd/MM/yyyy');
   List<Color>colorListItems=[
     Colors.green.shade100,
@@ -35,12 +36,8 @@ class _RecordState extends State<Record> {
   Widget build(BuildContext context) {
     final authInfo = Provider.of<List<UserInformation>?>(context);
     final user = Provider.of<MyUser>(context);
-    final billClothesList=Provider.of<List<BillsClothes>?>(context);
-    final billCosmeticList=Provider.of<List<BillsCosmetic>?>(context);
-    final billFood=Provider.of<List<BillsFood>?>(context);
-    final billPet=Provider.of<List<BillsPet>?>(context);
-    final billTravel=Provider.of<List<BillsTravel>?>(context);
-    final billVehicles=Provider.of<List<BillsVehicles>?>(context);
+    final billList=Provider.of<List<Bills>?>(context);
+    final incomesList=Provider.of<List<Incomes>?>(context);
     //avatar data
     String username='';
     int index=0;
@@ -57,56 +54,28 @@ class _RecordState extends State<Record> {
     //bill data
     List product=[];
     int cnt=0,sum=0;//sum is product.length, cnt= sum>7?7:cnt
-    double expenses=0;//sum of money in 1 month
-    if(billClothesList!=null){
-      for(int i=0;i<billClothesList.length;i++){
-        if(billClothesList[i].uid==user.uid){
-          expenses+=double.parse(billClothesList[i].money);
-          product.add(billClothesList[i]);
+    double expenses=0,incomes=0;//sum of money in 1 month
+    if(billList!=null){
+      for(int i=0;i<billList.length;i++){
+        if(billList[i].uid==user.uid){
+          product.add(billList[i]);
+          if(formatMonthYear.format(billList[i].dateTime)==formatMonthYear.format(DateTime.now())){
+            expenses+=double.parse(billList[i].money);
+          }
         }
       }
     }
-    if(billCosmeticList!=null){
-      for(int i=0;i<billCosmeticList.length;i++){
-        if(billCosmeticList[i].uid==user.uid){
-          expenses+=double.parse(billCosmeticList[i].money);
-          product.add(billCosmeticList[i]);
-        }
-      }
-    }
-    if(billFood!=null){
-      for(int i=0;i<billFood.length;i++){
-        if(billFood[i].uid==user.uid){
-          expenses+=double.parse(billFood[i].money);
-          product.add(billFood[i]);
-        }
-      }
-    }
-    if(billPet!=null){
-      for(int i=0;i<billPet.length;i++){
-        if(billPet[i].uid==user.uid){
-          expenses+=double.parse(billPet[i].money);
-          product.add(billPet[i]);
-        }
-      }
-    }
-    if(billTravel!=null){
-      for(int i=0;i<billTravel.length;i++){
-        if(billTravel[i].uid==user.uid){
-          expenses+=double.parse(billTravel[i].money);
-          product.add(billTravel[i]);
-        }
-      }
-    }
-    if(billVehicles!=null){
-      for(int i=0;i<billVehicles.length;i++){
-        if(billVehicles[i].uid==user.uid){
-          expenses+=double.parse(billVehicles[i].money);
-          product.add(billVehicles[i]);
+    if(incomesList!=null){
+      for(int i=0;i<incomesList.length;i++){
+        if(incomesList[i].uid==user.uid){
+          if(formatMonthYear.format(incomesList[i].dateTime)==formatMonthYear.format(DateTime.now())){
+            incomes+=double.parse(incomesList[i].money);
+          }
         }
       }
     }
     expenses/=1000;//display dot
+    incomes/=1000;//display dot
     product.sort((a,b)=> a.nowDateTime.compareTo(b.nowDateTime));
     sum=product.length;
     cnt=sum>=7?7:sum;
@@ -157,12 +126,12 @@ class _RecordState extends State<Record> {
                       Row(
                         children: [
                           Padding(
-                            padding: const EdgeInsets.only(left:10,right:90,top:0),
+                            padding: const EdgeInsets.only(left:10,right:70,top:0),
                             child: Text("-${expenses.toStringAsFixed(3)}.000",style: Font().bodyBlack,),
                           ),
                           Padding(
                             padding: const EdgeInsets.only(left:25,right:15,top:0),
-                            child: Text("+690.000",style: Font().bodyBlack,),
+                            child: Text("+${incomes.toStringAsFixed(3)}.000",style: Font().bodyBlack,),
                           ),
                           Expanded(child: Image.asset("assets/images/kitty.png",width:80,height:80,),)
                         ],
