@@ -6,7 +6,7 @@ import 'package:monney_management/const_value.dart';
 import 'package:monney_management/pages/home/bill_history_screen/bill_charts.dart';
 import 'package:monney_management/pages/home/bill_history_screen/search_bill.dart';
 import 'package:provider/provider.dart';
-
+import 'package:google_fonts/google_fonts.dart';
 import '../add_money/add_money.dart';
 
 class BillHistory extends StatefulWidget {
@@ -17,6 +17,7 @@ class BillHistory extends StatefulWidget {
 }
 
 class _BillHistoryState extends State<BillHistory> {
+  TextStyle fontBold=GoogleFonts.roboto(fontSize: 18,color: Colors.black,fontWeight: FontWeight.bold);
   bool innerBoxIsScroll=true;
   int? groupValue;
   DateTime? date;
@@ -26,65 +27,36 @@ class _BillHistoryState extends State<BillHistory> {
     double widthR=MediaQuery.of(context).size.width;
     double heightR=MediaQuery.of(context).size.height;
     final user = Provider.of<MyUser>(context);
-    final billClothesList=Provider.of<List<BillsClothes>?>(context);
-    final billCosmeticList=Provider.of<List<BillsCosmetic>?>(context);
-    final billFood=Provider.of<List<BillsFood>?>(context);
-    final billPet=Provider.of<List<BillsPet>?>(context);
-    final billTravel=Provider.of<List<BillsTravel>?>(context);
-    final billVehicles=Provider.of<List<BillsVehicles>?>(context);
-    List product=[];
+    final billList=Provider.of<List<Bills>?>(context);
+    final incomesList=Provider.of<List<Incomes>?>(context);
     double expenses=0,cloExpenses=0,cosExpenses=0,foodExpenses=0,petExpenses=0,travelExpenses=0,vehExpenses=0;//sum of money in 1 month
-    if(billClothesList!=null){
-      for(int i=0;i<billClothesList.length;i++){
-        if(billClothesList[i].uid==user.uid){
-          expenses+=double.parse(billClothesList[i].money);
-          cloExpenses+=double.parse(billClothesList[i].money);
-          product.add(billClothesList[i]);
-        }
-      }
-    }
-    if(billCosmeticList!=null){
-      for(int i=0;i<billCosmeticList.length;i++){
-        if(billCosmeticList[i].uid==user.uid){
-          expenses+=double.parse(billCosmeticList[i].money);
-          cosExpenses+=double.parse(billCosmeticList[i].money);
-          product.add(billCosmeticList[i]);
-        }
-      }
-    }
-    if(billFood!=null){
-      for(int i=0;i<billFood.length;i++){
-        if(billFood[i].uid==user.uid){
-          expenses+=double.parse(billFood[i].money);
-          foodExpenses+=double.parse(billFood[i].money);
-          product.add(billFood[i]);
-        }
-      }
-    }
-    if(billPet!=null){
-      for(int i=0;i<billPet.length;i++){
-        if(billPet[i].uid==user.uid){
-          expenses+=double.parse(billPet[i].money);
-          petExpenses+=double.parse(billPet[i].money);
-          product.add(billPet[i]);
-        }
-      }
-    }
-    if(billTravel!=null){
-      for(int i=0;i<billTravel.length;i++){
-        if(billTravel[i].uid==user.uid){
-          expenses+=double.parse(billTravel[i].money);
-          travelExpenses+=double.parse(billTravel[i].money);
-          product.add(billTravel[i]);
-        }
-      }
-    }
-    if(billVehicles!=null){
-      for(int i=0;i<billVehicles.length;i++){
-        if(billVehicles[i].uid==user.uid){
-          expenses+=double.parse(billVehicles[i].money);
-          vehExpenses+=double.parse(billVehicles[i].money);
-          product.add(billVehicles[i]);
+    double incomes=0;//sum of money in 1 month
+    if(billList!=null){
+      for(int i=0;i<billList.length;i++){
+        if(billList[i].uid==user.uid){
+          expenses+=double.parse(billList[i].money);
+          switch(billList[i].option){
+            case "Clothes":
+              cloExpenses+=double.parse(billList[i].money);
+              break;
+            case "Cosmetic":
+              cosExpenses+=double.parse(billList[i].money);
+              break;
+            case "Food":
+              foodExpenses+=double.parse(billList[i].money);
+              break;
+            case "Pet":
+              petExpenses+=double.parse(billList[i].money);
+              break;
+            case "Travel":
+              travelExpenses+=double.parse(billList[i].money);
+              break;
+            case "Vehicles":
+              vehExpenses+=double.parse(billList[i].money);
+              break;
+            default:
+              print("Error");
+          }
         }
       }
     }
@@ -110,6 +82,14 @@ class _BillHistoryState extends State<BillHistory> {
     List options=map.keys.toList();
     List percent=map.values.toList();
     expenses/=1000;
+    if(incomesList!=null){
+      for(int i=0;i<incomesList.length;i++){
+        if(incomesList[i].uid==user.uid){
+          incomes+=double.parse(incomesList[i].money);
+        }
+      }
+    }
+    incomes/=1000;
     return AnnotatedRegion(
       value:SystemUiOverlayStyle(
         statusBarColor:Colors.orange.shade100,
@@ -145,24 +125,24 @@ class _BillHistoryState extends State<BillHistory> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Padding(
-                            padding: const EdgeInsets.only(left:10,right:20,top:15),
-                            child: Text("Expenses",style: Font().headingBlack,),
+                            padding: const EdgeInsets.only(left:10,right:10,top:15),
+                            child: Text("All-Expenses",style: fontBold,),
                           ),
                           Padding(
-                            padding: const EdgeInsets.only(left:10,right:80,top:15),
-                            child: Text("Incomes",style: Font().headingBlack,),
+                            padding: const EdgeInsets.only(left:5,right:100,top:15),
+                            child: Text("All-Incomes",style: fontBold),
                           ),
                         ],
                       ),
                       Row(
                         children: [
                           Padding(
-                            padding: const EdgeInsets.only(left:10,right:100,top:15,bottom:20),
+                            padding: const EdgeInsets.only(left:10,right:80,top:15,bottom:20),
                             child: Text('-${expenses.toStringAsFixed(3)}.000',style: Font().bodyBlack,),
                           ),
                           Padding(
-                            padding: const EdgeInsets.only(left:10,right:15,top:15,bottom:20),
-                            child: Text("+690.000",style: Font().bodyBlack,),
+                            padding: const EdgeInsets.only(left:5,right:15,top:15,bottom:20),
+                            child: Text("+${incomes.toStringAsFixed(3)}.000",style: Font().bodyBlack,),
                           ),
                           Expanded(child: Image.asset("assets/images/kitty.png"),)
                         ],
