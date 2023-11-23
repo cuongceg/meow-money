@@ -1,4 +1,3 @@
-import 'dart:ffi';
 
 class Goals{
   String jan,feb,mar,apr,may,jun,jul,aug,sep,oct,nov,dec;
@@ -34,8 +33,8 @@ class Incomes{
 }
 
 class Saving{
-  Double money;
+  double money;
   String? uid;
-  //bool completed;
-  Saving({required this.money,this.uid});
+  bool completed;
+  Saving({required this.money,this.uid,required this.completed});
 }
