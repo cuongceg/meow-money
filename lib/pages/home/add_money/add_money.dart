@@ -422,11 +422,10 @@ class _AddState extends State<Add> {
     );
   }
   Future<void> _selectDate(BuildContext context) async {
-    final now = DateTime.now();
     final DateTime? picked = await showDatePicker(
         context: context,
-        initialDate: date ?? now,
-        firstDate: now,
+        initialDate: date ??DateTime.now(),
+        firstDate: DateTime.now().subtract(const Duration(days:7)),
         lastDate: DateTime(2101));
     if (picked != null && picked != date) {
       print('$picked');
