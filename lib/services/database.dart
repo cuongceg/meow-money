@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 import 'package:monney_management/models/user.dart';
@@ -231,7 +229,7 @@ class Database{
     return incomesCollection.snapshots().map((_incomesDataFromSnapshot));
   }
   //saving
-  Future addSavingData(Double money,bool completed) async{
+  Future addSavingData(double money,bool completed) async{
     return await savingCollection.doc(uid).set({
       "money":money,
       "completed":completed,
@@ -242,12 +240,12 @@ class Database{
     return snapshot.docs.map((doc){
       return Saving(
           money: doc.data().toString().contains('money')?doc.get('money'):0.0,
-          // completed: doc.data().toString().contains('money')?doc.get('completed').toBoolean():false,
+          completed: doc.data().toString().contains('money')?doc.get('completed'):false,
           uid: doc.data().toString().contains('uid')?doc.get('uid'):" ",
       );
     }).toList();
   }
   Stream<List<Saving>> get savingData {
-    return incomesCollection.snapshots().map((_savingDataFromSnapshot));
+    return savingCollection.snapshots().map((_savingDataFromSnapshot));
   }
 }
