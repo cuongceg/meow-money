@@ -85,10 +85,10 @@ class _BillChartState extends State<BillChart> {
           child: Text("Incomes:",style:Font().headingBlack,),
         ),
         incomes!=0.0?Charts(first:incomesPercent[3]*100,second:incomesPercent[2]*100,third:incomesPercent[1]*100,fourth:incomesPercent[0]*100,sfirst:incomesOption[3],ssecond:incomesOption[2],sthird: incomesOption[1])
-            :Text("No data incomes",style:Font().headingBlack,),
-        incomes!=0.0?IncomesBill(text:incomesOption[3],color: Colors.red.shade400,):Text("No data incomes",style:Font().bodyBlack,),
-        incomes!=0.0?IncomesBill(text:incomesOption[2],color:Colors.yellow.shade400,):Text("No data incomes",style:Font().bodyBlack,),
-        incomes!=0.0?IncomesBill(text:incomesOption[1],color: Colors.orange.shade400,):Text("No data incomes",style:Font().bodyBlack,),
+            :Center(child: Text("No data incomes",style:Font().headingBlack,)),
+        incomes!=0.0?IncomesBill(text:incomesOption[3],color: Colors.red.shade400,):Text("",style:Font().bodyBlack,),
+        incomes!=0.0?IncomesBill(text:incomesOption[2],color:Colors.orange.shade400,):Text("",style:Font().bodyBlack,),
+        incomes!=0.0?IncomesBill(text:incomesOption[1],color: Colors.yellow.shade400,):Text("",style:Font().bodyBlack,),
       ],
     );
   }
@@ -258,7 +258,7 @@ class IncomesBill extends StatelessWidget{
           }
         }
         break;
-      case "Other":
+      case "Others":
         if(incomesList!=null){
           for(int i=0;i<incomesList.length;i++){
             if(incomesList[i].uid==user.uid && incomesList[i].option=="Other"){
