@@ -7,7 +7,8 @@ import 'package:monney_management/services/database.dart';
 
 class UpdateBill extends StatefulWidget {
   const UpdateBill({super.key,required this.idTouch,required this.dateTime,required this.money,this.note});
-  final String idTouch,money,dateTime;
+  final String idTouch,money;
+  final DateTime dateTime;
   final String? note;
   @override
   State<UpdateBill> createState() => _UpdateBillState();
@@ -20,6 +21,7 @@ class _UpdateBillState extends State<UpdateBill> {
   final noteEditingController=TextEditingController();
   String? note;
   DateTime? date;
+  DateFormat dateFormat=DateFormat('dd/MM/yyyy');
   @override
   Widget build(BuildContext context) {
     final double widthR=MediaQuery.of(context).size.width;
@@ -111,7 +113,7 @@ class _UpdateBillState extends State<UpdateBill> {
                             await _selectDate(context);
                             dateEditingController.text = DateFormat('dd/MM/yyyy').format(date!);
                           },
-                          decoration: ConstWigdet().inputDecoration(widget.dateTime),
+                          decoration: ConstWigdet().inputDecoration(dateFormat.format(widget.dateTime)),
                         ),
                       ),
                       Padding(
@@ -140,7 +142,7 @@ class _UpdateBillState extends State<UpdateBill> {
                         ),
                         child: TextButton(
                             onPressed:(){
-                              Database().updateDocument(widget.idTouch,_currentValue.toString(),note,date??DateTime.now());
+                              Database().updateDocument(widget.idTouch,_currentValue==0?widget.money:_currentValue.toStringAsFixed(0),note,date??widget.dateTime);
                               Navigator.pop(context);
                               setState(() {
                                 _currentValue=0;

@@ -1,3 +1,4 @@
+import 'package:intl/intl.dart';
 import 'package:monney_management/pages/home/main_screen/update_bill.dart';
 import 'package:quickalert/quickalert.dart';
 import 'package:flutter/material.dart';
@@ -6,19 +7,21 @@ import 'package:monney_management/const_value.dart';
 
 class CurvedListItem extends StatelessWidget {
   const CurvedListItem({super.key,
+    required this.time,
     this.title,
     this.note,
     this.money,
     this.option,
-    this.time,
     this.color,
     this.nextColor,
     this.idTouch,
   });
-  final String? title,note,time,money,option,idTouch;
+  final String? title,note,money,option,idTouch;
+  final DateTime time;
   final Color? color,nextColor;
   @override
   Widget build(BuildContext context) {
+    DateFormat format=DateFormat("dd/MM/yyyy");
     return Container(
       color: nextColor,
       child: Container(
@@ -35,7 +38,7 @@ class CurvedListItem extends StatelessWidget {
         ),
         child:ListTile(
           leading:Image.asset("assets/images/payment.png",height:40,width: 40,),
-          title:Text(time??"12", style:Font().bodyBlack,),
+          title:Text(format.format(time), style:Font().bodyBlack,),
           subtitle: Text(title??"This is your record", style:Font().headingBlack,),
           onTap:(){
             QuickAlert.show(
@@ -62,7 +65,7 @@ class CurvedListItem extends StatelessWidget {
                       mainAxisAlignment:MainAxisAlignment.spaceBetween,
                       children: [
                         Text("Time:",style:Font().bodyBlack,),
-                        Text(time??"${DateTime.now()}",style:Font().bodyBlack,)
+                        Text(format.format(time),style:Font().bodyBlack,)
                       ],
                     ),
                     ConstWigdet().thinDivider(),
@@ -81,7 +84,7 @@ class CurvedListItem extends StatelessWidget {
                         children: [
                           IconButton(
                               onPressed:(){
-                                Navigator.push(context,MaterialPageRoute(builder: (context)=>UpdateBill(idTouch: idTouch??"US6sYmwwE57DxJuG2ZOA",money:money??"",dateTime:time??"",note:note,)));
+                                Navigator.push(context,MaterialPageRoute(builder: (context)=>UpdateBill(idTouch: idTouch??"US6sYmwwE57DxJuG2ZOA",money:money??"",dateTime:time,note:note,)));
                               },
                               icon:Image.asset("assets/images/pencil.png",width:35,height:35,),),
                           IconButton(

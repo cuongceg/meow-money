@@ -22,7 +22,6 @@ class _RecordState extends State<Record> {
   TextStyle fontBigBold=GoogleFonts.roboto(fontSize: 20,color: Colors.black,fontWeight: FontWeight.bold);
   DateFormat formatMonth=DateFormat.MMMM('en_US');
   DateFormat formatMonthYear=DateFormat('MM/yyyy');
-  DateFormat format=DateFormat('dd/MM/yyyy');
   List<Color>colorListItems=[
     Colors.green.shade100,
     Colors.lightBlue.shade100,
@@ -186,7 +185,7 @@ class _RecordState extends State<Record> {
                       itemBuilder:(context,index){
                         return CurvedListItem(
                           title: "Bill ${index+1}:-${(double.parse(product[sum-1-index].money)>1000)?(double.parse(product[sum-1-index].money)/1000).toStringAsFixed(3):product[sum-1-index].money}.000",
-                          time: format.format(product[sum-1-index].dateTime),
+                          time: product[sum-1-index].dateTime,
                           option: product[sum-1-index].option,
                           note: product[sum-1-index].note,
                           money: (double.parse(product[sum-1-index].money)>1000)?(double.parse(product[sum-1-index].money)/1000).toStringAsFixed(3):product[sum-1-index].money,
