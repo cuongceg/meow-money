@@ -165,7 +165,7 @@ class _SearchBillState extends State<SearchBill> {
                         return ChoiceChip(
                           backgroundColor:Colors.orange.shade200,
                           selectedColor: Colors.lightGreen,
-                          selected:state.selected(choices[choices.length-1])?true:state.selected(choices[i]),
+                          selected:state.selected(choices[i]),
                           onSelected:state.onSelected(choices[i]),
                           label:SizedBox(
                             height:40,
@@ -239,81 +239,13 @@ class _SearchBillState extends State<SearchBill> {
                           itemBuilder:(BuildContext context,index){
                             return Padding(
                               padding: const EdgeInsets.all(15.0),
-                              child: Container(
-                                height: 80,
-                                width: widthR,
-                                decoration:BoxDecoration(
-                                  borderRadius:BorderRadius.circular(40),
-                                  border:Border.all(color:Colors.black,width:2.0),
-                                ),
-                                child: ListTile(
-                                  title:Text("Money: -${(double.parse(search[index].money)>1000)?(double.parse(search[index].money)/1000).toStringAsFixed(3):search[index].money}.000 ",style: Font().bodyBlack,),
-                                  subtitle: Text("Date: ${format.format(search[index].dateTime)}",style:Font().bodyBlack,),
-                                    onTap:(){
-                                      QuickAlert.show(
-                                        context: context,
-                                        type: QuickAlertType.custom,
-                                        title: "Bill ${index+1}: -${(double.parse(search[index].money)>1000)?(double.parse(search[index].money)/1000).toStringAsFixed(3):search[index].money}.000 ",
-                                        text: search[index].option??'Details',
-                                        customAsset:"assets/images/cat_money.gif",
-                                        widget:Padding(
-                                          padding: const EdgeInsets.only(top:8.0),
-                                          child: Column(
-                                            mainAxisAlignment:MainAxisAlignment.center,
-                                            children: <Widget>[
-                                              ConstWigdet().thinDivider(),
-                                              Row(
-                                                mainAxisAlignment:MainAxisAlignment.spaceBetween,
-                                                children: [
-                                                  Text("Amount:",style:Font().bodyBlack,),
-                                                  Text("-${(double.parse(search[index].money)>1000)?(double.parse(search[index].money)/1000).toStringAsFixed(3):search[index].money}.000",style:Font().bodyBlack,)
-                                                ],
-                                              ),
-                                              ConstWigdet().thinDivider(),
-                                              Row(
-                                                mainAxisAlignment:MainAxisAlignment.spaceBetween,
-                                                children: [
-                                                  Text("Time:",style:Font().bodyBlack,),
-                                                  Text(format.format(search[index].dateTime),style:Font().bodyBlack,)
-                                                ],
-                                              ),
-                                              ConstWigdet().thinDivider(),
-                                              Row(
-                                                mainAxisAlignment:MainAxisAlignment.spaceBetween,
-                                                children: [
-                                                  Text("Note:",style:Font().bodyBlack,),
-                                                  Text(search[index].note??"",style:Font().bodyBlack,)
-                                                ],
-                                              ),
-                                              ConstWigdet().thinDivider(),
-                                              Padding(
-                                                padding: const EdgeInsets.only(top: 8.0),
-                                                child: Row(
-                                                  mainAxisAlignment:MainAxisAlignment.spaceBetween,
-                                                  children: [
-                                                    IconButton(
-                                                      onPressed:(){
-                                                        Navigator.push(context,MaterialPageRoute(builder: (context)=>UpdateBill(idTouch: search[index].idTouch??"US6sYmwwE57DxJuG2ZOA",money:search[index].money,dateTime:format.format(search[index].dateTime),note:search[index].note,)));
-                                                      },
-                                                      icon:Image.asset("assets/images/pencil.png",width:35,height:35,),),
-                                                    IconButton(
-                                                      onPressed:(){},
-                                                      icon:Image.asset("assets/images/vip.png",width:40,height:40,),),
-                                                    IconButton(
-                                                      onPressed:(){
-                                                        Database().deleteDocument(search[index].idTouch??"US6sYmwwE57DxJuG2ZOA");
-                                                        Navigator.pop(context);
-                                                      },
-                                                      icon:Image.asset("assets/images/delete.png",width:50,height:50,),),
-                                                  ],
-                                                ),
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                      );
-                                    }
-                                ),
+                              child: SearchBillListTile(
+                                money: search[index].money,
+                                option:search[index].option,
+                                time:search[index].dateTime,
+                                index: index,
+                                note: search[index].note,
+                                idTouch: search[index].idTouch,
                               ),
                             );
                           },
