@@ -6,7 +6,7 @@ A finance management app by AiThings Lab.
 
 1. [How to run this project?](#how-to-run-this-project)
 2. [Folder structure](#folder-structure)
-3. [Dependecies](Dependencies)
+3. [Dependencies](Dependencies)
 
 ## How to run this project?
 
