@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:size_config/size_config.dart';
-import 'package:slider_button/slider_button.dart';
 import 'package:monney_management/const_value.dart';
 
 
