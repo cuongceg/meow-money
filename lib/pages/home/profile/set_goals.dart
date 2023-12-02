@@ -196,8 +196,6 @@ class _SettingsState extends State<Settings> {
                     Database(uid: user!.uid).setGoals("10.000",valueChoose[i]);
                   }
                   Navigator.pop(context);
-                  print(_currentSliderValue.toStringAsFixed(3));
-                  print(monthChoose);
                 },
                 child:Text("Save",style:Font().bodyWhite,)
             ),
