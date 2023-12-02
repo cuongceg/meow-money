@@ -6,7 +6,7 @@ A finance management app by AiThings Lab.
 
 1. [How to run this project?](#how-to-run-this-project)
 2. [Folder structure](#folder-structure)
-3. [Dependencies](Dependencies)
+3. [Dependencies](#dependencies)
 
 ## How to run this project?
 
@@ -73,4 +73,22 @@ Running the app on mobile devices is recommended.
 
 ## Dependencies
 
+> _All of the dependencies are listed in [pubspec.yaml](pubspec.yaml).
 
+* [firebase_core](https://pub.dev/packages/firebase_core):Flutter plugin for Firebase Core, enabling connecting to multiple Firebase apps.
+
+* [firebase_auth](https://pub.dev/packages/firebase_auth):Flutter plugin for Firebase Auth, enabling authentication using passwords, phone numbers and identity providers like Google, Facebook and Twitter.
+
+* [cloud_firestore](https://pub.dev/packages/cloud_firestore):Flutter plugin for Cloud Firestore, a cloud-hosted, noSQL database with live synchronization and offline support on Android and iOS.
+
+* [provider](https://pub.dev/packages/provider):A wrapper around InheritedWidget to make them easier to use and more reusable.
+
+* [wave](https://pub.dev/packages/wave):Widget for displaying waves with custom color, duration, floating and blur effects.
+
+* [chart](https://pub.dev/packages/fl_chart):A highly customizable Flutter chart library that supports Line Chart, Bar Chart, Pie Chart, Scatter Chart, and Radar Chart.
+
+* [carousel_slider](https://pub.dev/packages/carousel_slider):A carousel slider widget, support infinite scroll and custom child widget.
+
+* [floating_bottom_bar](https://pub.dev/packages/flutter_floating_bottom_bar):A flutter package that allows showing a floating widget that can be used as a tab bar, bottom navigation bar, etc. The widget reacts to scrolling events too.
+
+* [calculator](https://pub.dev/packages/flutter_simple_calculator):Flutter widget that provides simple calculator. You can easily integrate a calculator to your apps.
